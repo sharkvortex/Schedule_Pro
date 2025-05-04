@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import TableSchedule from "../components/TableSchedule";
 import Navbar from "../components/Navbar";
 function Home() {
-  
+
   return (
     <>
       <Helmet>

@@ -14,10 +14,7 @@ function ManageUserPage() {
       <main className="w-full h-screen">
         <div className="flex w-full h-full">
             <SliderDashboard/>
-            <div className="flex-1">
             <ManageUser/>
-            </div>
-            
         </div>
       </main>
     </>

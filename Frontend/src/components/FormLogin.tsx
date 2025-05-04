@@ -3,7 +3,7 @@ import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 type FormLoginProps = {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -11,7 +11,7 @@ function FormLogin() {
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState<FormLoginProps>({
-    email: '',
+    username: '',
     password: ''
   });
 
@@ -30,18 +30,18 @@ function FormLogin() {
 
         <div className="space-y-5">
           <div className="space-y-1">
-            <label htmlFor="email" className="text-sm font-medium">Email</label>
+            <label htmlFor="username" className="text-sm font-medium">Username</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Mail size={18} className="text-gray-500" />
               </div>
               <input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                className="w-full pl-10 pr-4 py-3 rounded-lg placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-500/50 focus:border-transparent transition-all duration-200"
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                value={formData.email}
+                id="username"
+                type="text"
+                placeholder="Username , Email or Student ID"
+                className="w-full pl-10 pr-4 py-3 border border-gray-400 rounded-lg placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-500/50 focus:border-transparent transition-all duration-200"
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                value={formData.username}
               />
             </div>
           </div>
@@ -56,7 +56,7 @@ function FormLogin() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                className="w-full pl-10 pr-12 py-3 rounded-lg  placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-500/50 focus:border-transparent transition-all duration-200"
+                className="w-full pl-10 pr-12 py-3 border border-gray-400 rounded-lg  placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-500/50 focus:border-transparent transition-all duration-200"
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 value={formData.password}
               />

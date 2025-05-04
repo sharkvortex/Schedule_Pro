@@ -1,7 +1,5 @@
-import { UserPlus, FilePlus, Edit,  Activity} from 'lucide-react';
+import { UserPlus, FilePlus, Edit, Activity } from "lucide-react";
 function Dashboard() {
-  
-  
   return (
     <div className="flex w-full min-w-[340px] min-h-screen">
       {/* Main Content */}
@@ -9,10 +7,14 @@ function Dashboard() {
         {/* Dashboard Content */}
         <div className="p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-800">แดชบอร์ดการจัดการ</h1>
-            <p className="text-gray-600">ยินดีต้อนรับกลับมา! นี่คือภาพรวมของระบบในวันนี้</p>
+            <h1 className="text-2xl font-bold text-gray-800">
+              แดชบอร์ดการจัดการ
+            </h1>
+            <p className="text-gray-600">
+              ยินดีต้อนรับกลับมา! นี่คือภาพรวมของระบบในวันนี้
+            </p>
           </div>
-          
+
           {/* Stats Cards */}
           <div className="grid grid-cols-4  max-[1130px]:grid-cols-3 max-[940px]:grid-cols-2 max-[740px]:grid-cols-1  gap-6 mb-8">
             <div className="p-3 flex items-center  rounded-lg shadow-sm">
@@ -26,7 +28,7 @@ function Dashboard() {
                 </div>
               </div>
             </div>
-            
+
             <div className="p-3 flex items-center  rounded-lg shadow-sm">
               <div className="w-full p-3 flex  sm:flex-row justify-between items-center">
                 <div>
@@ -37,10 +39,8 @@ function Dashboard() {
                   <FilePlus className="w-6 h-6 text-green-600" />
                 </div>
               </div>
-              
-              
             </div>
-            
+
             <div className="p-3 flex items-center  rounded-lg shadow-sm">
               <div className="w-full p-3 flex  sm:flex-row justify-between items-center">
                 <div>
@@ -52,7 +52,7 @@ function Dashboard() {
                 </div>
               </div>
             </div>
-            
+
             <div className="p-3 flex items-center  rounded-lg shadow-sm">
               <div className="w-full p-3 flex  sm:flex-row justify-between items-center">
                 <div>
@@ -65,40 +65,46 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          
+
           {/* Action Cards */}
           <div className="grid max-[740px]:grid-cols-1 grid-cols-3 max-[940px]:grid-cols-2 gap-6 mb-8">
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-xl shadow-md text-white">
+            <div className="flex flex-col justify-between bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-xl shadow-md text-white">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-xl font-bold">จัดการผู้ใช้</span>
+                <span className="text-l sm:text-xl font-bold">จัดการผู้ใช้</span>
                 <UserPlus className="h-8 w-8" />
               </div>
-              <p className="mb-4">เพิ่ม, แก้ไข, หรือลบผู้ใช้ในระบบ</p>
-              <button className="mt-2 bg-white text-blue-600 py-2 px-4 rounded-lg font-medium hover:bg-blue-50">
-                จัดการตอนนี้
-              </button>
+              <p className="mb-4 text-sm">เพิ่ม, แก้ไข, หรือลบผู้ใช้ในระบบ</p>
+              <div className="flex justify-end">
+                <button className="mt-2 max-sm:text-sm bg-white text-blue-600 py-2 px-4 rounded-lg font-medium hover:bg-blue-50">
+                  จัดการตอนนี้
+                </button>
+              </div>
             </div>
-            
-            <div className="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-xl shadow-md text-white">
+
+            <div className="flex flex-col justify-between bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-xl shadow-md text-white">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-xl font-bold">เพิ่มงานใหม่</span>
+                <span className="text-l sm:text-xl font-bold">เพิ่มงานใหม่</span>
                 <FilePlus className="h-8 w-8" />
               </div>
-              <p className="mb-4">สร้างงานใหม่ บันทึกลงฐานข้อมูล</p>
-              <button className="mt-2 bg-white text-green-600 py-2 px-4 rounded-lg font-medium hover:bg-green-50">
-                เพิ่มงาน
-              </button>
+              <p className="mb-4 text-sm">สร้างงานใหม่ บันทึกลงฐานข้อมูล</p>
+              <div className="flex justify-end">
+                <button className="mt-2 max-sm:text-sm bg-white text-green-600 py-2 px-4 rounded-lg font-medium hover:bg-green-50">
+                  เพิ่มงาน
+                </button>
+              </div>
             </div>
-            
-            <div className="bg-gradient-to-r from-indigo-500 to-indigo-600 p-6 rounded-xl shadow-md text-white">
+
+            <div className="flex flex-col justify-between bg-gradient-to-r from-indigo-500 to-indigo-600 p-6 rounded-xl shadow-md text-white">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-xl font-bold">รายงานระบบ</span>
+                <span className="text-l sm:text-xl font-bold">รายงานระบบ</span>
                 <Activity className="h-8 w-8" />
               </div>
-              <p className="mb-4">ดูบันทึกกิจกรรมและสถิติของระบบ</p>
-              <button className="mt-2 bg-white text-indigo-600 py-2 px-4 rounded-lg font-medium hover:bg-indigo-50">
-                ดูรายงาน
-              </button>
+              <p className="mb-4 text-sm">ดูบันทึกกิจกรรมและสถิติของระบบ</p>
+              <div className="flex justify-end">
+                <button className="mt-2 max-sm:text-sm bg-white text-indigo-600 py-2 px-4 rounded-lg font-medium hover:bg-indigo-50">
+                  ดูรายงาน
+                </button>
+              </div>
             </div>
           </div>
         </div>

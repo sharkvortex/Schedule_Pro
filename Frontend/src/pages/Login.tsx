@@ -1,6 +1,19 @@
 import FormLogin from "../components/FormLogin"
 import { Helmet } from "react-helmet-async"
+import { useAuth } from "../context/AuthContext"
+import { useEffect } from "react";
+import { useNavigate  } from "react-router-dom";
 function Login() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    if (auth?.isLogin) {
+      navigate('/');
+    }
+  }, [auth?.isLogin]);
+
   return (
     <>
     <Helmet>

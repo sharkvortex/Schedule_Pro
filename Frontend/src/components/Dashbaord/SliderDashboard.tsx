@@ -15,7 +15,7 @@ import { Link, useLocation } from "react-router-dom";
 function SliderDashboard() {
   const [isOpen, setIsOpen] = useState(false);
   const navbarRef = useRef<HTMLDivElement | null>(null);
-  const location = useLocation(); // <--- ใช้ location
+  const location = useLocation(); 
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -75,7 +75,7 @@ function SliderDashboard() {
       {!isOpen && (
         <div
           onClick={toggleNavbar}
-          className="sm:hidden fixed top-5 left-4 z-50"
+          className="sm:hidden fixed top-5 left-3.5 z-50"
         >
           <div className="bg-blue-500 absolute -top-1 -right-8 w-10 h-10 rounded flex items-center justify-center shadow cursor-pointer hover:bg-blue-600 transition-colors duration-300">
             <RiMenuFold2Line className="w-7 h-7 text-white" />
@@ -85,11 +85,11 @@ function SliderDashboard() {
 
       <div
         ref={navbarRef}
-        className={`fixed top-0 left-0 h-full navbar transition-transform duration-300 ease-in-out z-40
+        className={`fixed top-0 left-0 h-full z-40 navbar  shadow transition-all duration-300
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
         w-[250px] sm:w-[300px] sm:static sm:translate-x-0`}
       >
-        <div className="p-6 flex items-center justify-between">
+        <div className="p-6 cursor-default flex items-center justify-between">
           <h2 className="text-xl font-bold text-blue-600 flex items-center">
             <Layers className="w-6 h-6 mr-2" />
             ระบบจัดการ
@@ -112,7 +112,7 @@ function SliderDashboard() {
             return (
               <Link key={label} to={link}>
                 <div
-                  className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer transition-colors duration-300
+                  className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer 
                   ${
                     isActive
                       ? "bg-blue-500 text-white"

@@ -30,6 +30,10 @@ html,body {
   background-color: var(--background-light);
   color: var(--text-light);
 }
+.light .loader {
+  background-color: #ffffff6e;
+  color: var(--text-light);
+}
 
 .light .btn-primary {
   background-color: var(--highlight-color-light);
@@ -62,6 +66,10 @@ html,body {
 }
 .dark .navbar {
   background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+.dark .loader{
+  background-color: #0a0e1879;
   color: var(--text-dark);
 }
 
