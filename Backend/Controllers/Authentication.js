@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 const prisma = new PrismaClient();
 
-// Authentication
 export const Authentication = async (request, reply) => {
   try {
     const authHeader = request.headers.authorization;
@@ -14,19 +13,45 @@ export const Authentication = async (request, reply) => {
       return reply.status(401).send({ message: 'No token provided', Login: false });
     }
 
-    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
 
-    
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return reply.status(401).send({ message: 'User not found', Login: false });
+    }
+
+    if (decoded.role !== user.role) {
+      const newToken = jwt.sign(
+        { id: user.id,username:user.username , email: user.email, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d' }
+      );
+
+      reply.setCookie('schedule_pro', newToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        maxAge: 60 * 60 * 24, 
+      });
+
+      request.user = jwt.verify(newToken, process.env.JWT_SECRET);
+
+      return reply.status(200).send({ user: request.user, Login: true, message: 'Token updated due to role change' });
+    }
+
     request.user = decoded;
 
-    return reply.status(200).send({ user: decoded , Login: true });
+    return reply.status(200).send({ user: decoded, Login: true });
   } catch (error) {
-   
-    return reply.status(401).send({ 
+    return reply.status(401).send({
       message: 'Invalid or expired token',
-      error: error.message, 
-      Login: false 
+      error: error.message,
+      Login: false
     });
   }
 };
@@ -102,5 +127,71 @@ export const Register = async (request, reply) => {
   } catch (error) {
     console.error('Error during registration:', error);
     return reply.status(500).send({ message: 'Internal Server Error', error: error.message });
+  }
+};
+
+// Login
+export const  Login = async (request,reply) =>{
+  const { username, password, checked } = request.body;
+  if (!username || !password) {
+    return reply.status(400).send({
+      message: "Enter your username and password",
+    });
+  }
+
+  try{
+    const [StudentId, Username, Email] = await Promise.all([
+      prisma.user.findUnique({ where: { studentId: username } }),
+      prisma.user.findUnique({ where: { username: username } }),
+      prisma.user.findUnique({ where: { email: username } }),
+    ]);
+    const user = StudentId || Username || Email;
+    if (!user) {
+      return reply.status(404).send({ message: "User not found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return reply.status(401).send({ message: "Invalid password" });
+    }
+    const token = jwt.sign(
+      {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role, 
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: checked ? "7d" : "1d", 
+      }
+    );
+    reply.setCookie("schedule_pro", token, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production", 
+      maxAge: checked ? 7 * 24 * 60 * 60 : 24 * 60 * 60, 
+    });
+
+    return reply.status(200).send({
+      message: "Login successful",
+      token: token
+    })
+  }catch(error){
+    return reply.status(500).send({ message: "Internal server error" });
+  }
+}
+
+// Logout
+export const Logout = async (request, reply) => {
+  try {
+    reply.clearCookie('schedule_pro', {
+      path: '/', 
+    });
+
+    reply.send({ message: 'Logged out successfully' });
+  } catch (error) {
+    reply.code(500).send({ error: 'Logout failed' });
   }
 };

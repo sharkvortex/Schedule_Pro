@@ -30,6 +30,21 @@ html,body {
   background-color: var(--background-light);
   color: var(--text-light);
 }
+.light .navbar-bg {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+.light .swap-bg {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+.light .thead {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
 .light .loader {
   background-color: #ffffff6e;
   color: var(--text-light);
@@ -67,6 +82,18 @@ html,body {
 .dark .navbar {
   background-color: var(--background-dark);
   color: var(--text-dark);
+}
+.dark .navbar-bg {
+  background-color: var(--background-light);
+  color: var(--text-light);
+}
+.dark .swap-bg {
+  background-color: var(--background-light);
+  color: var(--text-light);
+}
+.dark .thead {
+  background-color: var(--background-light);
+  color: var(--text-light);
 }
 .dark .loader{
   background-color: #0a0e1879;
@@ -108,3 +135,8 @@ input[type="number"] {
   -webkit-appearance: none;
   appearance: none;
 }
+
+
+
+
+

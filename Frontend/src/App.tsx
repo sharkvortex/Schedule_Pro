@@ -10,6 +10,8 @@ import ManageUserPage from "./pages/Admin/ManageUserPage";
 import ManageWorkPage from "./pages/Admin/ManageworkPage";
 import { useAuth } from "./context/AuthContext";
 import { useLocation } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ManageSubjectPage from "./pages/Admin/ManageSubjectPage";
 function App() {
   const auth = useAuth();
   const location = useLocation();
@@ -27,10 +29,12 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/subject/:subjectId" element={<SubjectPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/dashboard/manage-users" element={<ManageUserPage />} />
-        <Route path="/dashboard/manage-works" element={<ManageWorkPage />} />
+        <Route path="/subject/:subjectId" element={<ProtectedRoute allowedRoles={["admin" , "member"]}><SubjectPage /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute allowedRoles={["admin"]}><DashboardPage/></ProtectedRoute>} />
+        <Route path="/dashboard/manage-users" element={<ProtectedRoute allowedRoles={["admin"]}><ManageUserPage /></ProtectedRoute>} />
+        <Route path="/dashboard/manage-works" element={<ProtectedRoute allowedRoles={["admin"]}><ManageWorkPage/></ProtectedRoute>} />
+        <Route path="/dashboard/manage-subjects" element={<ProtectedRoute allowedRoles={["admin"]}><ManageSubjectPage/></ProtectedRoute>} />
+       
       </Routes>
   );
 }

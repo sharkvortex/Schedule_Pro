@@ -1,5 +1,7 @@
-import { UserPlus, FilePlus, Edit, Activity } from "lucide-react";
+import { UserPlus, SwatchBook, Edit, Activity , FilePlus , ClipboardCheck} from "lucide-react";
+import useDashboard from "../../hooks/useDashboard";
 function Dashboard() {
+  const {data} = useDashboard();
   return (
     <div className="flex w-full min-w-[340px] min-h-screen">
       {/* Main Content */}
@@ -21,7 +23,7 @@ function Dashboard() {
               <div className="w-full  p-3 flex  sm:flex-row justify-between items-center">
                 <div>
                   <p className="text-sm ">ผู้ใช้ทั้งหมด</p>
-                  <h3 className="text-2xl font-bold text-gray-800">1,275</h3>
+                  <h3 className="text-2xl font-bold text-gray-800">{data?.totalUsers}</h3>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <UserPlus className="w-6 h-6 text-blue-600" />
@@ -32,11 +34,11 @@ function Dashboard() {
             <div className="p-3 flex items-center  rounded-lg shadow-sm">
               <div className="w-full p-3 flex  sm:flex-row justify-between items-center">
                 <div>
-                  <p className="text-sm">งานทั้งหมด</p>
-                  <h3 className="text-2xl font-bold text-gray-800">832</h3>
+                  <p className="text-sm">วิชาทั้งหมด</p>
+                  <h3 className="text-2xl font-bold text-gray-800">{data?.totalSubjects}</h3>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <FilePlus className="w-6 h-6 text-green-600" />
+                  <SwatchBook className="w-6 h-6 text-green-600" />
                 </div>
               </div>
             </div>
@@ -44,7 +46,7 @@ function Dashboard() {
             <div className="p-3 flex items-center  rounded-lg shadow-sm">
               <div className="w-full p-3 flex  sm:flex-row justify-between items-center">
                 <div>
-                  <p className="text-sm ">งานที่เสร็จสิ้น</p>
+                  <p className="text-sm ">งานทั้งหมด</p>
                   <h3 className="text-2xl font-bold text-gray-800">621</h3>
                 </div>
                 <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
@@ -61,6 +63,18 @@ function Dashboard() {
                 </div>
                 <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                   <Edit className="w-6 h-6 text-yellow-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="p-3 flex items-center  rounded-lg shadow-sm">
+              <div className="w-full p-3 flex  sm:flex-row justify-between items-center">
+                <div>
+                  <p className="text-sm ">งานที่เสร็จสิ้น</p>
+                  <h3 className="text-2xl font-bold text-gray-800">621</h3>
+                </div>
+                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                  <ClipboardCheck className="w-6 h-6 text-indigo-600" />
                 </div>
               </div>
             </div>

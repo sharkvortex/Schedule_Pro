@@ -54,7 +54,7 @@ const StyledWrapper = styled.div<{ size: number }>`
 
   @keyframes spinner-fade9234 {
     0% {
-      background-color: #ffff;
+      background-color: #636363;
     }
     100% {
       background-color: transparent;

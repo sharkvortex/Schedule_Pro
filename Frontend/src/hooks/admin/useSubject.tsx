@@ -1,0 +1,59 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+
+interface SubjectType {
+  id: number;
+  subject_id: string;
+  subject_name: string;
+  teacher_name: string;
+  study_day: string;
+  time_start: string;
+  time_end: string;
+  period: string;
+  room: string;
+}
+
+export const useSubject = () => {
+  const [subjects, setSubjects] = useState<SubjectType[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchSubjects = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/subjects`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      if (data?.data) {
+        setSubjects(data.data);
+      } else {
+        throw new Error("No subjects found.");
+      }
+
+    } catch (err: any) {
+      console.error("Failed to fetch subjects:", err);
+      setError("Failed to fetch subjects");
+      toast.error("Unable to load subjects.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSubjects();
+  }, []);
+
+  return {
+    subjects,
+    loading,
+    error,
+    refetch: fetchSubjects,
+  };
+};

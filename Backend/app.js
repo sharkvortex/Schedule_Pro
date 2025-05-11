@@ -1,6 +1,7 @@
 import Fastify from "fastify";
 const fastify = Fastify({ logger: false });
-
+import dotenv from 'dotenv'
+dotenv.config()
 // cookie
 import cookie from '@fastify/cookie'
 fastify.register(cookie);
@@ -12,12 +13,17 @@ import cors from '@fastify/cors';
 
 fastify.register(cors, {
   origin: 'http://localhost:5173', 
-  credentials: true, 
+  credentials: true,
+  methods: ["GET" , "POST" , "PUT" , "DELETE"]
 });
 
 // Routers
 import AuthRoutes from "./Routes/AuthRoutes.js";
+import DashboardRoutes from "./Routes/DashboardRoutes.js";
+import AdminRoutes from "./Routes/AdminRoutes.js";
 fastify.register(AuthRoutes, { prefix: "/api" });
+fastify.register(DashboardRoutes, { prefix: "/api" });
+fastify.register(AdminRoutes, { prefix: "/api" });
 
 
 

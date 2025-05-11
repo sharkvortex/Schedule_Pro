@@ -1,7 +1,9 @@
 import Dashboard from "../components/Dashbaord/Dashbaord";
 import SliderDashboard from "../components/Dashbaord/SliderDashboard";
 import { Helmet } from "react-helmet-async";
+
 function DashboardPage() {
+
   return (
     <>
     <Helmet>

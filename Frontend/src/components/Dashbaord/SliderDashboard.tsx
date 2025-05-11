@@ -7,6 +7,7 @@ import {
   Users,
   Shield,
   XIcon,
+  LibraryBig
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { RiMenuFold2Line } from "react-icons/ri";
@@ -47,6 +48,11 @@ function SliderDashboard() {
       icon: <Users className="w-5 h-5 mr-3" />,
       label: "จัดการผู้ใช้",
       link: "/dashboard/manage-users",
+    },
+    {
+      icon: <LibraryBig className="w-5 h-5 mr-3" />,
+      label: "จัดการวิชา",
+      link: "/dashboard/manage-subjects",
     },
     {
       icon: <FilePlus className="w-5 h-5 mr-3" />,
