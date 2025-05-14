@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  user
+  member
+  admin
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   studentId String   @unique
@@ -20,7 +26,7 @@ model User {
   lastName  String
   username  String   @unique
   email     String   @unique
-  role      String  @default("user")
+  role      Role  @default(user)
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -31,16 +37,26 @@ enum Period {
   AFTERNOON
   EVENING
 }
+
+enum Study_day {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
+}
 model Subjects {
   id           Int       @id @default(autoincrement())
   subject_id   String    @unique
   subject_name String
   teacher_name String
-  study_day    String
+  study_day    Study_day
   time_start   String  
   time_end     String  
   period       Period
   room         String
   createAt     DateTime  @default(now())
-  updateAt     DateTime  @updatedAt
+  updateAt     DateTime  @updatedAt  @default(now())
 }

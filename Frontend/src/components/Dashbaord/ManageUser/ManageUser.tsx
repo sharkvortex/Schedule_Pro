@@ -7,7 +7,7 @@ function ManageUser() {
   return (
     <div className="w-full h-full p-2">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl max-sm:text-lg font-bold ">Manage Users</h1>
+        <h1 className="text-2xl max-sm:text-lg font-bold px-3">จัดการผู้ใช้</h1>
         <div className="relative">
           <input
             value={search}

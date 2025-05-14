@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
 
 interface SubjectType {
   id: number;
@@ -15,7 +14,7 @@ interface SubjectType {
 }
 
 export const useSubject = () => {
-  const [subjects, setSubjects] = useState<SubjectType[] | null>(null);
+  const [subjects, setSubjects] = useState<SubjectType[] | null>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,9 +37,7 @@ export const useSubject = () => {
       }
 
     } catch (err: any) {
-      console.error("Failed to fetch subjects:", err);
-      setError("Failed to fetch subjects");
-      toast.error("Unable to load subjects.");
+      // console.error("Failed to fetch subjects:", err);
     } finally {
       setLoading(false);
     }
@@ -55,5 +52,6 @@ export const useSubject = () => {
     loading,
     error,
     refetch: fetchSubjects,
+    setSubjects
   };
 };

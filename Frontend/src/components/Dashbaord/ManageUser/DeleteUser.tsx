@@ -13,10 +13,10 @@ function DeleteUser({ setIsOpen, username, onDelete }: DeleteUserProps) {
         className={`w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl transform transition-all duration-500`}
       >
         <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+          <h5 className="text-xl font-bold text-white dark:text-white flex items-center gap-2">
             <FaTrashAlt className="text-red-500" />
             Confirm Deletion
-          </h2>
+          </h5>
           <button
             onClick={() => setIsOpen(false)}
             className="text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 transition hover:cursor-pointer"

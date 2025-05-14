@@ -10,7 +10,7 @@ interface PropsType {
 }
 
 function UserList({ search }: PropsType) {
-  const { data, getUsers, loading } = useUsers();
+  const { data, getUsers, loading, totalCount } = useUsers();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { DeleteuserID } = useDeleteUser();
   const [dataEdit, setDataEdit] = useState<
@@ -26,7 +26,6 @@ function UserList({ search }: PropsType) {
   >(undefined);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize] = useState<number>(10);
-  const [totalCount, setTotalCount] = useState<number>(0);
 
   function getRoleColor(role: string): string {
     switch (role) {
@@ -75,13 +74,7 @@ function UserList({ search }: PropsType) {
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      getUsers(currentPage, pageSize, search)
-        .then((response) => {
-          setTotalCount(response.totalCount);
-        })
-        .catch((error) => {
-          console.error("Error fetching users:", error);
-        });
+      getUsers(currentPage, pageSize, search);
     }, 300);
 
     return () => clearTimeout(delayDebounce);
@@ -117,24 +110,32 @@ function UserList({ search }: PropsType) {
         {loading ? (
           <div className="w-full min-h-[600px] flex items-center justify-center">
             <Loading />
-
           </div>
         ) : (
           <>
             <table className="min-w-[800px] w-full text-sm rounded-t overflow-hidden rounded-lg">
               <thead className="thead text-xs  uppercase">
                 <tr>
-                  <th className="px-4 py-3 text-left">NO.</th>
-                  <th className="px-4 py-3 text-left">Username</th>
-                  <th className="px-4 py-3 text-left">First Name</th>
-                  <th className="px-4 py-3 text-left">Last Name</th>
-                  <th className="px-4 py-3 text-left">Email</th>
-                  <th className="px-4 py-3 text-left">Role</th>
-                  <th className="px-4 py-3 text-center">Actions</th>
+                  <th className="px-4 py-3 text-left">ลำดับ</th>
+                  <th className="px-4 py-3 text-left">ยูสเซอร์</th>
+                  <th className="px-4 py-3 text-left">ชื่อจริง</th>
+                  <th className="px-4 py-3 text-left">นามสกุล</th>
+                  <th className="px-4 py-3 text-left">อีเมล</th>
+                  <th className="px-4 py-3 text-left">บทบาท</th>
+                  <th className="px-4 py-3 text-center">จัดการ</th>
                 </tr>
               </thead>
-              <tbody className="">
-                {data.map((user, index) => (
+              <tbody className="w-full">
+                {data.length === 0 ? 
+                <>
+                <tr  className="w-full flex justify-center p-2">
+                  <td  className="w-full" >ไม่พบข้อมูลผู้ใช้</td>
+                </tr>
+                  
+                </>
+                : 
+                <>
+                {data?.map((user, index) => (
                   <tr key={user.id}>
                     <td className="px-4 py-3">
                       {(currentPage - 1) * pageSize + index + 1}
@@ -174,6 +175,9 @@ function UserList({ search }: PropsType) {
                     </td>
                   </tr>
                 ))}
+                </>
+                }
+                
               </tbody>
             </table>
 
