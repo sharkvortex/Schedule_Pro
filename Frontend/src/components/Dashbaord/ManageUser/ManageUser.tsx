@@ -8,17 +8,17 @@ function ManageUser() {
     <div className="w-full h-full p-2">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl max-sm:text-lg font-bold px-3">จัดการผู้ใช้</h1>
-        <div className="relative">
+        <div className="relative px-4">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             type="text"
             placeholder="ค้นหาผู้ใช้..."
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent transition duration-300 text-sm"
+            className="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent transition duration-300 text-sm placeholder:text-gray-500"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
+            className="absolute left-7 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

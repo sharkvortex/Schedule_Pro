@@ -11,6 +11,16 @@ import pool from "./lib/db.js";
 // Cors Origin
 import cors from '@fastify/cors';
 
+// mutipart
+import fastifyMultipart from '@fastify/multipart';
+fastify.register(fastifyMultipart,{
+  attachFieldsToBody: false,
+  limits:{
+    fileSize: 20 * 1024 * 1024,
+    files: 10,
+  }
+});
+
 fastify.register(cors, {
   origin: 'http://localhost:5173', 
   credentials: true,

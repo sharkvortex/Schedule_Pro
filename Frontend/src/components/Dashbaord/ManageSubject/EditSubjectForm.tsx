@@ -85,20 +85,20 @@ function EditSubjectForm({ setIsOpen, data, refetch }: EditSubjectFormProps) {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+    <div className="w-full relative">
       <div
-        className={`w-full max-w-2xl  rounded-3xl shadow-2xl transition-all duration-300 transform ${
+        className={`w-full absolute z-20 min-h-screen transition-all duration-300 transform normal-bg  ${
           show ? "opacity-100 scale-100" : "opacity-0 scale-95"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 p-6">
-          <p className="text-2xl max-sm:text-sm text-white font-bold flex items-center gap-2">
+        <div className="flex items-center justify-between  p-6">
+          <p className="text-2xl max-sm:text-sm text-blue-500 font-bold flex items-center gap-2">
             <FaBook className="text-blue-500" />
             แก้ไขวิชา
           </p>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 transition hover:cursor-pointer"
+            className="text-gray-500 hover:text-red-500  transition hover:cursor-pointer"
             title="Close"
           >
             <FaTimes className="text-2xl" />
@@ -106,6 +106,7 @@ function EditSubjectForm({ setIsOpen, data, refetch }: EditSubjectFormProps) {
         </div>
 
         <form
+          lang="th"
           onSubmit={handleSubmit}
           className="p-6 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm"
         >
@@ -161,6 +162,7 @@ function EditSubjectForm({ setIsOpen, data, refetch }: EditSubjectFormProps) {
             icon={<FaClock />}
             type="time"
           />
+          
           <InputField
             label="เวลาสิ้นสุด"
             name="time_end"
@@ -220,11 +222,9 @@ const InputField = ({
   type?: string;
 }) => (
   <div>
-    <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
-      {label}
-    </label>
+    <label className="block mb-2 font-medium text-gray-700 ">{label}</label>
     <div className="flex items-center border rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 focus-within:ring-2 focus-within:ring-blue-500 transition-all">
-      <span className="text-gray-400 dark:text-gray-500">{icon}</span>
+      <span className="text-white">{icon}</span>
       <input
         type={type}
         name={name}
@@ -250,9 +250,7 @@ const SelectField = ({
   options: { label: string; value: string }[];
 }) => (
   <div>
-    <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
-      {label}
-    </label>
+    <label className="block mb-2 font-medium text-gray-600">{label}</label>
     <div className="relative">
       <select
         name={name}

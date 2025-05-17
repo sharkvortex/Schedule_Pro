@@ -61,17 +61,17 @@ function TableSchedule() {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       >
-        <table className="min-w-[1400px] w-full h-full">
+        <table className="min-w-[1400px] w-full h-full ">
           <thead>
-            <tr className="text-sm">
+            <tr className="text-sm max-sm:text-xs">
               {timeSlots.map((slot, index) => (
-                <th key={index} className="p-2 text-center font-normal">
+                <th key={index} className="p-2 text-center font-medium">
                   {slot}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="text-center text-sm">
+          <tbody className="text-center text-sm max-sm:text-xs font-medium">
             {days.map((day, i) => (
               <tr key={i}>
                 <td>{day}</td>

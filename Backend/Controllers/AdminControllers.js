@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+import ImageKit from "imagekit";
 
 // GET USERS
 export const getUsers = async (request, reply) => {
@@ -19,6 +20,7 @@ export const getUsers = async (request, reply) => {
             { firstName: { contains: search } },
             { lastName: { contains: search } },
             { email: { contains: search } },
+            { studentId: { contains: search } },
             ...(isValidRole ? [{ role: searchLower }] : []),
           ],
         }
@@ -28,6 +30,7 @@ export const getUsers = async (request, reply) => {
       where: whereCondition,
       select: {
         id: true,
+        studentId: true,
         username: true,
         firstName: true,
         lastName: true,
@@ -64,28 +67,32 @@ export const getUsers = async (request, reply) => {
 
 //EDIT USERS
 export const editUser = async (request, reply) => {
-  const { id } = request.params;
-  const { username, email, firstName, lastName, role } = request.body;
+  const userId = Number(request.params.id);
+  if (isNaN(userId)) {
+    return reply.code(400).send({ message: "Invalid user ID" });
+  }
+
+  const { username, studentId, email, firstName, lastName, role } =
+    request.body;
 
   try {
     const existingUser = await prisma.user.findUnique({
-      where: { id: Number(id) },
+      where: { id: userId },
     });
 
     if (!existingUser) {
-      return reply.code(404).send({ error: "User not found" });
+      return reply.code(404).send({ message: "User not found" });
     }
 
     if (username && username !== existingUser.username) {
       const existingUsername = await prisma.user.findFirst({
         where: {
           username,
-          NOT: { id: Number(id) },
+          NOT: { id: userId },
         },
       });
-
       if (existingUsername) {
-        return reply.code(400).send({ error: "Username is already taken." });
+        return reply.code(400).send({ message: "Username is already taken." });
       }
     }
 
@@ -93,37 +100,55 @@ export const editUser = async (request, reply) => {
       const existingEmail = await prisma.user.findFirst({
         where: {
           email,
-          NOT: { id: Number(id) },
+          NOT: { id: userId },
         },
       });
-
       if (existingEmail) {
-        return reply.code(400).send({ error: "Email is already taken." });
+        return reply.code(400).send({ message: "Email is already taken." });
       }
     }
 
+    if (studentId && studentId !== existingUser.studentId) {
+      const existingStudentId = await prisma.user.findFirst({
+        where: {
+          studentId,
+          NOT: { id: userId },
+        },
+      });
+      if (existingStudentId) {
+        return reply
+          .code(400)
+          .send({ message: "Student ID is already taken." });
+      }
+    }
+
+    const fieldsToUpdate = {
+      username,
+      studentId,
+      email,
+      firstName,
+      lastName,
+      role,
+    };
     const dataToUpdate = {
+      ...Object.fromEntries(
+        Object.entries(fieldsToUpdate).filter(([_, v]) => v !== undefined)
+      ),
       updatedAt: new Date(),
     };
 
-    if (username) dataToUpdate.username = username;
-    if (email) dataToUpdate.email = email;
-    if (firstName) dataToUpdate.firstName = firstName;
-    if (lastName) dataToUpdate.lastName = lastName;
-    if (role) dataToUpdate.role = role;
-
     const updatedUser = await prisma.user.update({
-      where: { id: Number(id) },
+      where: { id: userId },
       data: dataToUpdate,
     });
 
-    return reply.send({
+    return reply.status(200).send({
       message: "User updated successfully",
       user: updatedUser,
     });
   } catch (error) {
     console.error(error);
-    return reply.code(500).send({ error: "Something went wrong" });
+    return reply.code(500).send({ message: "Something went wrong" });
   }
 };
 
@@ -158,19 +183,23 @@ export const getSubjects = async (request, reply) => {
     const dayOrder = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
     const periodOrder = ["MORNING", "AFTERNOON", "EVENING"];
 
-   
     const sortedSubjects = subjects.sort((a, b) => {
-      const dayDiff = dayOrder.indexOf(a.study_day) - dayOrder.indexOf(b.study_day);
+      const dayDiff =
+        dayOrder.indexOf(a.study_day) - dayOrder.indexOf(b.study_day);
       if (dayDiff !== 0) return dayDiff;
 
-      const periodDiff = periodOrder.indexOf(a.period) - periodOrder.indexOf(b.period);
+      const periodDiff =
+        periodOrder.indexOf(a.period) - periodOrder.indexOf(b.period);
       if (periodDiff !== 0) return periodDiff;
 
       return a.time_start.localeCompare(b.time_start);
     });
 
     return reply.status(200).send({
-      message: sortedSubjects.length === 0 ? "No subjects found." : "Subjects fetched successfully.",
+      message:
+        sortedSubjects.length === 0
+          ? "No subjects found."
+          : "Subjects fetched successfully.",
       data: sortedSubjects,
     });
   } catch (error) {
@@ -181,7 +210,6 @@ export const getSubjects = async (request, reply) => {
     });
   }
 };
-
 
 // CREATE SUBJECT
 export const createSubject = async (request, reply) => {
@@ -264,13 +292,17 @@ export const createSubject = async (request, reply) => {
 
 // EDIT SUBJECT
 export const editSubject = async (request, reply) => {
-  const {id,subject_id,subject_name,
-        teacher_name,
-        study_day,
-        time_start,
-        time_end,
-        period,
-        room} = request.body;
+  const {
+    id,
+    subject_id,
+    subject_name,
+    teacher_name,
+    study_day,
+    time_start,
+    time_end,
+    period,
+    room,
+  } = request.body;
   try {
     const existing = await prisma.subjects.findUnique({
       where: { id },
@@ -337,14 +369,13 @@ export const editSubject = async (request, reply) => {
 export const deleteSubject = async (request, reply) => {
   const { id } = request.params;
   try {
-    
     const existingSubject = await prisma.subjects.findUnique({
       where: { id: Number(id) },
     });
 
     if (!existingSubject) {
       return reply.code(404).send({
-        message: 'ไม่พบรายวิชาที่ต้องการลบ',
+        message: "ไม่พบรายวิชาที่ต้องการลบ",
       });
     }
 
@@ -353,13 +384,162 @@ export const deleteSubject = async (request, reply) => {
     });
 
     return reply.code(200).send({
-      message: 'ลบรายวิชาสำเร็จ',
+      message: "ลบรายวิชาสำเร็จ",
     });
   } catch (error) {
-    console.error('Delete subject error:', error);
+    console.error("Delete subject error:", error);
     return reply.code(500).send({
-      message: 'ไม่สามารถลบรายวิชาได้',
+      message: "ไม่สามารถลบรายวิชาได้",
       error: error.message,
     });
+  }
+};
+
+const imagekit = new ImageKit({
+  publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
+  urlEndpoint: process.env.IMAGE_KIT_URL_ENDPOINT,
+});
+
+// CREATEWORK
+export const createWork = async (request, reply) => {
+  const parts = request.parts();
+  const workData = {};
+  const uploadPromises = [];
+
+  try {
+    for await (const part of parts) {
+      if (part.file && part.fieldname === "image[]") {
+        const chunks = [];
+        for await (const chunk of part.file) {
+          chunks.push(chunk);
+        }
+        const fileBuffer = Buffer.concat(chunks);
+
+        const uploadPromise = new Promise((resolve, reject) => {
+          const rawName = part.filename || "file.jpg";
+          const ext = rawName.split(".").pop();
+          const newFileName = `schedulr_pro_${Date.now()}.${ext}`;
+          imagekit.upload(
+            {
+              file: fileBuffer,
+              fileName: newFileName,
+              useUniqueFileName: false,
+            },
+            (err, res) => {
+              if (err) reject(err);
+              else
+                resolve({ url: res.url, fileId: res.fileId });
+            }
+          );
+        });
+
+        uploadPromises.push(uploadPromise);
+      } else {
+        workData[part.fieldname] = part.value;
+      }
+    }
+
+    const requiredFields = ["subject_id", "title", "assignedDate", "dueDate"];
+    for (const field of requiredFields) {
+      if (!workData[field]) {
+        return reply
+          .status(400)
+          .send({ message: `Missing required field: ${field}` });
+      }
+    }
+
+    const createdWork = await prisma.works.create({
+      data: {
+        subject_id: workData.subject_id,
+        title: workData.title,
+        description: workData.description || null,
+        assignedDate: new Date(workData.assignedDate),
+        dueDate: new Date(workData.dueDate),
+        link: workData.link || null,
+        linkCode: workData.linkCode || null,
+      },
+    });
+
+    if (uploadPromises.length > 0) {
+      const imagesData = await Promise.all(uploadPromises);
+
+      await prisma.images.createMany({
+        data: imagesData.map(({ url, fileId }) => ({
+          url,
+          fileId,
+          workId: createdWork.id,
+        })),
+      });
+    }
+
+    return reply.status(200).send({
+      message: "✅ Work created successfully",
+      workId: createdWork.id,
+      imageCount: uploadPromises.length,
+    });
+  } catch (err) {
+    console.error("❌ Failed to create work:", err);
+    return reply.status(500).send({
+      message: "❌ Internal server error during work creation",
+      error: err.message,
+    });
+  }
+};
+
+
+// GET WORK
+export const getWorks = async (request, reply) => {
+  try {
+    const works = await prisma.works.findMany({
+      include: {
+        images: true,
+        subject: true
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    reply.send(works);
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการดึงข้อมูล works:", error);
+    reply
+      .code(500)
+      .send({ message: "ไม่สามารถดึงข้อมูลได้", error: error.message });
+  }
+};
+
+// DELETE IMAGE
+
+export const deleteImage = async (request, reply) => {
+  const { fileId } = request.params;
+
+  if (!fileId || typeof fileId !== "string") {
+    console.warn("⚠️ fileId ไม่ถูกต้อง:", fileId);
+    return reply
+      .status(400)
+      .send({ success: false, message: "fileId ไม่ถูกต้องหรือไม่มีค่า" });
+  }
+
+  try {
+    const [response] = await Promise.all([
+      imagekit.deleteFile(fileId),
+      prisma.images.deleteMany({ where: { fileId } }),
+    ]);
+
+    return reply
+      .status(200)
+      .send({ success: true, message: "ลบรูปภาพสำเร็จ", data: response });
+  } catch (error) {
+    console.error("❌ ลบรูปภาพไม่สำเร็จ:", error?.message || error);
+
+    return reply
+      .status(500)
+      .send({
+        success: false,
+        message: "เกิดข้อผิดพลาดระหว่างลบรูปภาพ",
+        error: error?.message || error,
+      });
   }
 };

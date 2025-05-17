@@ -33,7 +33,7 @@ function Navbar() {
     >
       <div
         onClick={toggleNavbar}
-        className="absolute z-10 -right-11 p-2  sm:text-2xl bg-[#4f39f6]/50 hover:bg-[#4f39f6] rounded duration-1000 hover:cursor-pointer"
+        className="absolute z-10 -right-11 p-2  sm:text-2xl  bg-blue-600 hover:bg-blue-500 rounded duration-1000 hover:cursor-pointer"
       >
         <div className="text-white ">
           {isOpen ? <RiMenuUnfold2Fill /> : <RiMenuFold2Line />}

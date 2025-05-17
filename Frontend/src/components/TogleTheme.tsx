@@ -3,17 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 
 function ToggleTheme() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-
-  useEffect(() => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+    return savedTheme ? savedTheme === 'dark' : prefersDark;
+  });
 
-    setIsDarkMode(isDark);
-    document.documentElement.classList.add(isDark ? 'dark' : 'light');
-    document.documentElement.classList.remove(isDark ? 'light' : 'dark');
-  }, []);
+  useEffect(() => {
+    document.documentElement.classList.add(isDarkMode ? 'dark' : 'light');
+    document.documentElement.classList.remove(isDarkMode ? 'light' : 'dark');
+  }, [isDarkMode]);
 
   const toggleTheme = () => {
     const newMode = !isDarkMode;
@@ -21,9 +20,6 @@ function ToggleTheme() {
 
     const newTheme = newMode ? 'dark' : 'light';
     localStorage.setItem('theme', newTheme);
-
-    document.documentElement.classList.add(newTheme);
-    document.documentElement.classList.remove(newMode ? 'light' : 'dark');
   };
 
   return (

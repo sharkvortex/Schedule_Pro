@@ -1,34 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap");
 @import "tailwindcss";
-@layer utilities {
-  input:-webkit-autofill {
-    transition: background-color 9999s ease-in-out 0s;
-    -webkit-text-fill-color: #ffffff !important;
-  }
-}
+
 :root {
-  --background-light: #ffffff; 
-  --text-light: #242424; 
-
-  --background-dark: #0a0e18; 
-  --text-dark: #ffffff; 
-
-  --highlight-color-light: #FF7043; 
-  --highlight-color-dark: #4f39f6; 
+  --background-light: #ffffff;
+  --text-light: #242424;
+  --background-dark: #000000;
+  --text-dark: #ffffff;
+  --highlight-color-light: #ff7043;
+  --highlight-color-dark: #4f39f6;
 }
 
-html,body {
-  font-family: 'Sarabun', sans-serif;
-  scroll-behavior: smooth;
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-text-fill-color: rgb(71, 71, 71) !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+html,
+body {
+  font-family: "Fredoka", "IBM Plex Sans Thai", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-style: normal;
 }
 
 .light body {
-  background-color: var(--background-light);
-  color: var(--text-light);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.light h1, .light h2, .light h3 {
+.light h1,
+.light h2,
+.light h3 {
   color: var(--text-light);
   font-weight: 700;
 }
@@ -40,16 +42,16 @@ html,body {
   background-color: var(--background-dark);
   color: var(--text-dark);
 }
+.light .normal-bg {
+  background-color: var(--background-light);
+  color: var(--text-light)!important;
+}
 
 .light .swap-bg {
   background-color: var(--background-dark);
   color: var(--text-dark);
 }
 
-.light .thead {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-}
 
 .light .loader {
   background-color: #ffffff6e;
@@ -63,11 +65,9 @@ html,body {
   border-radius: 5px;
 }
 
-
 .light .highlight {
   color: var(--highlight-color-light);
 }
-
 
 .dark body {
   background-color: var(--background-dark);
@@ -75,7 +75,9 @@ html,body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.dark h1, .dark h2, .dark h3 {
+.dark h1,
+.dark h2,
+.dark h3 {
   color: var(--text-dark);
 }
 
@@ -93,15 +95,16 @@ html,body {
   background-color: var(--background-light);
   color: var(--text-light);
 }
+.dark .normal-bg {
+  background-color: var(--background-dark);
+  color: var(--text-dark) !important;
+}
 .dark .swap-bg {
   background-color: var(--background-light);
-  color: var(--text-light);
+  color: var(--text-dark);
 }
-.dark .thead {
-  background-color: var(--background-light);
-  color: var(--text-light);
-}
-.dark .loader{
+
+.dark .loader {
   background-color: #0a0e1879;
   color: var(--text-dark);
 }
@@ -122,12 +125,12 @@ html,body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #b485ff6e; 
+  background-color: #b485ff6e;
   border-radius: 100vh;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #60a5fa; 
+  background-color: #60a5fa;
 }
 
 input::-webkit-outer-spin-button,
@@ -141,8 +144,3 @@ input[type="number"] {
   -webkit-appearance: none;
   appearance: none;
 }
-
-
-
-
-

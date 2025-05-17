@@ -8,7 +8,7 @@ import DeleteSubject from "./DeleteSubject";
 import { useDeleteSubject } from "../../../hooks/admin/Subject/useDeleteSubject";
 import toast from "react-hot-toast";
 function SubjectList() {
-  const { subjects, refetch, loading , setSubjects } = useSubject();
+  const { subjects, refetch, loading, setSubjects } = useSubject();
   const [editOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(true);
   const [deleteID, setDeleteID] = useState<number>();
@@ -82,7 +82,7 @@ function SubjectList() {
       }
     } catch (error) {
       console.error("Edit error", error);
-      setSubjects([])
+      setSubjects([]);
     }
   };
 
@@ -108,25 +108,25 @@ function SubjectList() {
           subjectId={deleteID}
         />
       )}
-
+      <div className="w-full flex items-center justify-between px-2 py-3">
+        <h1 className="text-2xl max-sm:text-lg font-bold px-3">จัดการรายวิชา</h1>
+        <button
+          onClick={() => setCreateOpen(!createOpen)}
+          className="text-sm rounded px-10 py-2 bg-blue-600 text-white flex  items-center gap-2 my-3 hover:bg-blue-700 transition-colors duration-200 shadow-md hover:cursor-pointer"
+        >
+          เพิ่มวิชา
+          <BookPlus className="w-5 h-5" />
+        </button>
+      </div>
       <div className="w-full overflow-x-auto px-2">
-        <div className="w-full flex ">
-          <button
-            onClick={() => setCreateOpen(!createOpen)}
-            className="text-sm rounded px-6 py-2 bg-blue-600 text-white flex items-center gap-2 my-3 hover:bg-blue-700 transition-colors duration-200 shadow-md hover:cursor-pointer"
-          >
-            เพิ่มวิชา
-            <BookPlus className="w-5 h-5" />
-          </button>
-        </div>
-        <div className="inline-block w-full min-w-[1000px] rounded-t overflow-hidden">
+        <div className="inline-block w-full min-w-max rounded-t overflow-hidden">
           {loading ? (
             <div className="w-full min-h-screen flex items-center justify-center">
               <Loading />
             </div>
           ) : (
             <table className="w-full min-w-max text-sm max-sm:text-xs text-left">
-              <thead className="thead">
+              <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="px-4 py-3">รหัสวิชา</th>
                   <th className="px-4 py-3">ชื่อวิชา</th>
@@ -141,7 +141,7 @@ function SubjectList() {
               <tbody>
                 {subjects && subjects.length === 0 ? (
                   <tr className="w-full">
-                    <td className="text-center py-4 text-gray-500">
+                    <td colSpan={8} className="text-center py-4 text-gray-500">
                       ยังไม่มีรายวิชา
                     </td>
                   </tr>

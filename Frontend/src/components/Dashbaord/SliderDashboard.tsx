@@ -91,8 +91,8 @@ function SliderDashboard() {
 
       <div
         ref={navbarRef}
-        className={`fixed top-0 left-0 h-full z-40 navbar  shadow transition-all duration-300
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        className={`fixed top-0 left-0 h-full z-40  navbar transition-all duration-300 
+        ${isOpen ? "translate-x-0" : "-translate-x-full "}
         w-[250px] sm:w-[300px] sm:static sm:translate-x-0`}
       >
         <div className="p-6 cursor-default flex items-center justify-between">

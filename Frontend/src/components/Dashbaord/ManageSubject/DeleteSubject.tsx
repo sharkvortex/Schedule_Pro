@@ -14,7 +14,7 @@ const DeleteSubject: React.FC<DeleteSubjectProps> = ({ isOpen, onClose, onConfir
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-[90%] max-w-md p-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">คุณแน่ใจหรือไม่?</h2>
+        <h5 className="text-2xl text-red-500 font-semibold ">คุณแน่ใจหรือไม่?</h5>
         <p className="mt-2 text-gray-600 dark:text-gray-300">คุณต้องการลบรายวิชานี้จริง ๆ ใช่หรือไม่? การลบจะไม่สามารถย้อนกลับได้</p>
         
         <div className="mt-6 flex justify-end gap-3">

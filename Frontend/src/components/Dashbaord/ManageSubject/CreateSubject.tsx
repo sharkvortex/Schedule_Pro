@@ -113,20 +113,20 @@ function CreateSubjectForm({ setIsOpen , refetch }: CreateSubjectFormProps) {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+    <div className="w-full relative">
       <div
-        className={`w-full max-w-2xl rounded-3xl shadow-2xl transition-all duration-300 transform ${
+        className={`w-full absolute min-h-screen transition-all duration-300 transform normal-bg ${
           show ? "opacity-100 scale-100" : "opacity-0 scale-95"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 p-6">
-          <p className="text-2xl max-sm:text-sm text-white font-bold flex items-center gap-2">
-            <FaBook className="text-green-500" />
+        <div className="flex items-center justify-between p-6">
+          <p className="text-2xl max-sm:text-sm text-blue-500 font-bold flex items-center gap-2">
+            <FaBook className="text-blue-500" />
             เพิ่มวิชาใหม่
           </p>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 transition hover:cursor-pointer"
+            className="text-gray-500 hover:text-red-500 transition hover:cursor-pointer"
             title="Close"
           >
             <FaTimes className="text-2xl" />
@@ -201,7 +201,7 @@ function CreateSubjectForm({ setIsOpen , refetch }: CreateSubjectFormProps) {
           <div className="md:col-span-2 flex justify-end gap-4 pt-6">
             <button
               type="submit"
-              className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-6 py-2 rounded-full shadow-lg transition-all hover:scale-105 hover:cursor-pointer"
+              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 py-2 rounded-full shadow-lg transition-all hover:scale-105 hover:cursor-pointer"
             >
               <FaSave />
               สร้างวิชา
@@ -237,7 +237,7 @@ const InputField = ({
   type?: string;
 }) => (
   <div>
-    <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+    <label className="block mb-2 font-medium text-gray-700 ">
       {label}
     </label>
     <div className="flex items-center border rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 focus-within:ring-2 focus-within:ring-blue-500 transition-all">
@@ -267,7 +267,7 @@ const SelectField = ({
   options: { label: string; value: string }[];
 }) => (
   <div>
-    <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+    <label className="block mb-2 font-medium text-gray-700">
       {label}
     </label>
     <div className="relative">

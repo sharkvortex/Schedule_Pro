@@ -26,7 +26,7 @@ model User {
   lastName  String
   username  String   @unique
   email     String   @unique
-  role      Role  @default(user)
+  role      Role     @default(user)
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -47,16 +47,44 @@ enum Study_day {
   SAT
   SUN
 }
+
 model Subjects {
   id           Int       @id @default(autoincrement())
   subject_id   String    @unique
   subject_name String
   teacher_name String
   study_day    Study_day
-  time_start   String  
-  time_end     String  
+  time_start   String
+  time_end     String
   period       Period
   room         String
   createAt     DateTime  @default(now())
-  updateAt     DateTime  @updatedAt  @default(now())
+  updateAt     DateTime  @default(now()) @updatedAt
+
+  works Works[]
+}
+
+model Works {
+  id           Int       @id @default(autoincrement())
+  subject_id   String
+  subject      Subjects  @relation(fields: [subject_id], references: [subject_id])
+  title        String
+  description  String?
+  assignedDate DateTime
+  dueDate      DateTime
+  link         String?
+  linkCode     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  images       Images[]  
+}
+
+model Images {
+  id        Int    @id @default(autoincrement())
+  workId    Int
+  url       String
+  fileId    String
+  work      Works  @relation(fields: [workId], references: [id] , onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
 }

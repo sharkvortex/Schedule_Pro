@@ -14,7 +14,7 @@ function ManageSubjectPage() {
       <main className="w-full h-screen">
         <div className="flex w-full h-full">
             <SliderDashboard/>
-          {/*  */}
+          
           <ManageSubject/>
         </div>
       </main>

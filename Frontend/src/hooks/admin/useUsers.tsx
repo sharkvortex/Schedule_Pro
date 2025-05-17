@@ -3,6 +3,7 @@ import { useState } from "react";
 
 interface UsersProps {
   id: number;
+  studentId: string;
   username: string;
   firstName: string;
   lastName: string;

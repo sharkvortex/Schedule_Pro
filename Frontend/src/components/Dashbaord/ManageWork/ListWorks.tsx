@@ -1,20 +1,41 @@
-function ListWorks() {
+import TableWorks from "./TableWorks";
+import { useGetWork } from "../../../hooks/admin/Work/useGetWork";
+import EditWork from "./EditWork";
+import { useState } from "react";
+import { WorkDataType } from "../../../hooks/admin/Work/useGetWork";
+
+interface EditAndCreateProps {
+  isEditWork: boolean;
+  setIsEditWork: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsCreate: React.Dispatch<React.SetStateAction<boolean>>;
+  isCreate: boolean;
+}
+
+function ListWorks({ isEditWork, setIsEditWork }: EditAndCreateProps) {
+  const [dataEdit, setDataEdit] = useState<WorkDataType>();
+  const { workData } = useGetWork();
+
   return (
-    <div className="w-full min-h-[600px]">
-      <div className="flex justify-end">
-        <select className="swap-bg px-3 py-1 text-xs border border-gray-400 rounded-xl" name="select" id="select">
-          <option value="216613102">
-            216613102 || พื้นฐานวิทยาศาสตร์สำหรับวิศวกรรม
-          </option>
-          <option value="216613102">
-            216613102 || พื้นฐานวิทยาศาสตร์สำหรับวิศวกรรม
-          </option>
-          <option value="216613102">
-            216613102 || พื้นฐานวิทยาศาสตร์สำหรับวิศวกรรม
-          </option>
-        </select>
+    <>
+      <div className="w-full relative">
+        <TableWorks
+          works={
+            workData ? (Array.isArray(workData) ? workData : [workData]) : []
+          }
+          onEdit={(work) => {
+            setIsEditWork(true);
+            setDataEdit(work);
+          }}
+          onDelete={() => console.log("delete")}
+          isEditWork={isEditWork}
+        />
+        <EditWork
+          isEditWork={isEditWork}
+          setIsEditWork={setIsEditWork}
+          data={dataEdit}
+        />
       </div>
-    </div>
+    </>
   );
 }
 

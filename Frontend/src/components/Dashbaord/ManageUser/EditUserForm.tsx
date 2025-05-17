@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
-import { FaSave, FaTimes, FaUser, FaEnvelope, FaUserTag, FaIdBadge } from "react-icons/fa";
+import {
+  FaSave,
+  FaTimes,
+  FaUser,
+  FaEnvelope,
+  FaUserTag,
+  FaIdBadge,
+} from "react-icons/fa";
 import { EditUser } from "../../../hooks/admin/useEditUser";
+import { IdCard } from "lucide-react";
 
 interface EditUserFormProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: {
     id: number;
+    studentId: string;
     firstName: string;
     lastName: string;
     username: string;
@@ -16,15 +25,23 @@ interface EditUserFormProps {
   onSuccess: () => void;
 }
 
-function EditUserForm({ setIsOpen, data, getUsers, onSuccess  }: EditUserFormProps) {
+function EditUserForm({
+  setIsOpen,
+  data,
+  getUsers,
+  onSuccess,
+}: EditUserFormProps) {
   const [formData, setFormData] = useState({ ...data });
   const [show, setShow] = useState(false);
-  const { Edituser } = EditUser();  
+  const { Edituser } = EditUser();
+
   useEffect(() => {
     setTimeout(() => setShow(true), 10);
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -35,15 +52,10 @@ function EditUserForm({ setIsOpen, data, getUsers, onSuccess  }: EditUserFormPro
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await Edituser(formData); 
-
-      if (res?.status === 200) {
-        await getUsers();
-        onSuccess();
-        setIsOpen(false);
-      } else {
-        console.error("Failed to update user");
-      }
+      await Edituser(formData);
+      await getUsers();
+      onSuccess();
+      setIsOpen(false);
     } catch (error) {
       console.log(error);
     }
@@ -52,51 +64,59 @@ function EditUserForm({ setIsOpen, data, getUsers, onSuccess  }: EditUserFormPro
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
       <div
-        className={`w-full max-w-2xl bg-white dark:bg-gray-900 rounded-3xl shadow-2xl transition-all duration-300 transform ${show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+        className={`w-full max-w-2xl rounded-3xl shadow-2xl transition-all duration-300 transform bg-white dark:bg-gray-900 ${
+          show ? "opacity-100 scale-100" : "opacity-0 scale-95"
+        }`}
       >
-        
-        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 p-6">
-          <p className="text-2xl text-white font-bold flex items-center gap-2">
-            <FaUserTag className="text-blue-500" />
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 rounded-t-3xl">
+          <h5 className="text-2xl font-semibold text-white flex items-center gap-2">
+            <FaUserTag className="text-indigo-500" />
             Edit User
-          </p>
+          </h5>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 transition hover:cursor-pointer"
+            className="text-gray-500 hover:text-red-500 transition hover:cursor-pointer"
             title="Close"
           >
-            <FaTimes className="text-2xl" />
+            <FaTimes className="text-xl" />
           </button>
         </div>
 
-        
-        <form onSubmit={handleSubmit} className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm"
+        >
           {[
+            { label: "Student ID", name: "studentId", icon: <IdCard /> },
             { label: "First Name", name: "firstName", icon: <FaUser /> },
             { label: "Last Name", name: "lastName", icon: <FaUser /> },
             { label: "Username", name: "username", icon: <FaIdBadge /> },
             { label: "Email", name: "email", icon: <FaEnvelope /> },
           ].map(({ label, name, icon }) => (
             <div key={name}>
-              <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                 {label}
               </label>
-              <div className="flex items-center border rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 focus-within:ring-2 focus-within:ring-blue-500 transition-all">
-                <span className="text-gray-400 dark:text-gray-500">{icon}</span>
+              <div className="flex items-center gap-2 border-2 rounded-xl px-3 py-2 bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus-within:ring-2 focus-within:ring-indigo-400 transition">
+                <span className="text-indigo-400 dark:text-indigo-300">
+                  {icon}
+                </span>
                 <input
                   type={name === "email" ? "email" : "text"}
                   name={name}
                   value={formData[name as keyof typeof formData]}
                   onChange={handleChange}
                   placeholder={`Enter ${label.toLowerCase()}`}
-                  className="ml-3 w-full bg-transparent focus:outline-none text-gray-800 dark:text-white"
+                  className="w-full bg-transparent focus:outline-none text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
                 />
               </div>
             </div>
           ))}
 
           <div className="md:col-span-2">
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
               Role
             </label>
             <div className="relative">
@@ -104,23 +124,23 @@ function EditUserForm({ setIsOpen, data, getUsers, onSuccess  }: EditUserFormPro
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="w-full appearance-none border rounded-xl px-4 py-2 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+                className="w-full border-2 rounded-xl px-4 py-2 bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-400 appearance-none"
               >
                 <option value="admin">Admin</option>
                 <option value="member">Member</option>
                 <option value="user">User</option>
               </select>
-              <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500">
+              <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-400 dark:text-indigo-300">
                 ▼
               </div>
             </div>
           </div>
 
-          
-          <div className="md:col-span-2 flex justify-end gap-4 pt-6">
+          {/* Buttons */}
+          <div className="md:col-span-2 flex justify-end gap-3 pt-4">
             <button
               type="submit"
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 py-2 rounded-full shadow-lg transition-all hover:scale-105 hover:cursor-pointer"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-6 py-2 rounded-full shadow-lg transition-transform transform hover:scale-105 hover:cursor-pointer"
             >
               <FaSave />
               Save
@@ -128,7 +148,7 @@ function EditUserForm({ setIsOpen, data, getUsers, onSuccess  }: EditUserFormPro
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-full shadow-sm transition-all dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white hover:cursor-pointer"
+              className="inline-flex items-center gap-2 bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white px-6 py-2 rounded-full transition hover:cursor-pointer"
             >
               <FaTimes />
               Cancel
