@@ -1,12 +1,13 @@
-// server.js
-import fastify from './app.js';
+import app from "./app.js";
 
-const PORT = process.env.PORT || 8080;
-
-fastify.listen({ port: PORT }, (err, address) => {
-  if (err) {
-    console.error(err);
+const start = async () => {
+  try {
+    await app.listen({ port: 3000 });
+    console.log("Server is running on http://localhost:3000");
+  } catch (err) {
+    app.log.error(err);
     process.exit(1);
   }
-  console.log(`🚀 Server is running on ${address}`);
-});
+};
+
+start();

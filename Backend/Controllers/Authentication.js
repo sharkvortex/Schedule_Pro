@@ -197,7 +197,7 @@ export const Login = async (request, reply) => {
     reply.setCookie("schedule_pro", token, {
       path: "/",
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
       maxAge: checked ? 7 * 24 * 60 * 60 : 24 * 60 * 60,
     });
