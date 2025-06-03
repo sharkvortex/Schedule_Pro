@@ -1,12 +1,12 @@
+// app.js
 import Fastify from "fastify";
-import rateLimit from '@fastify/rate-limit';
-import awsLambdaFastify from '@fastify/aws-lambda';
-import dotenv from 'dotenv';
+import rateLimit from "@fastify/rate-limit";
+import dotenv from "dotenv";
 dotenv.config();
 
-import cookie from '@fastify/cookie';
-import cors from '@fastify/cors';
-import fastifyMultipart from '@fastify/multipart';
+import cookie from "@fastify/cookie";
+import cors from "@fastify/cors";
+import fastifyMultipart from "@fastify/multipart";
 
 import pool from "./lib/db.js";
 
@@ -17,15 +17,14 @@ import Routes from "./Routes/Routes.js";
 
 const fastify = Fastify({ logger: false });
 
-
 await fastify.register(cookie);
 
 await fastify.register(fastifyMultipart, {
   attachFieldsToBody: false,
   limits: {
-    fileSize: 20 * 1024 * 1024, 
+    fileSize: 20 * 1024 * 1024,
     files: 10,
-  }
+  },
 });
 
 await fastify.register(cors, {
@@ -36,29 +35,24 @@ await fastify.register(cors, {
 
 await fastify.register(rateLimit, {
   max: 100,
-  timeWindow: '1 minute',
-  hook: 'onRequest',
+  timeWindow: "1 minute",
+  hook: "onRequest",
   addHeaders: {
-    'x-ratelimit-limit': true,
-    'x-ratelimit-remaining': true,
-    'x-ratelimit-reset': true,
+    "x-ratelimit-limit": true,
+    "x-ratelimit-remaining": true,
+    "x-ratelimit-reset": true,
   },
 });
 
-
-fastify.get('/', async (request, reply) => {
+fastify.get("/", async (request, reply) => {
   return { message: "Hello Fastify!" };
 });
-
 
 await fastify.register(AuthRoutes, { prefix: "/api" });
 await fastify.register(DashboardRoutes, { prefix: "/api" });
 await fastify.register(AdminRoutes, { prefix: "/api" });
 await fastify.register(Routes, { prefix: "/api" });
 
-
 await fastify.ready();
 
-
-const proxy = awsLambdaFastify(fastify);
-export const handler = proxy;
+export default fastify;
