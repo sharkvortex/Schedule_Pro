@@ -1,13 +1,6 @@
 import { useRef, useState } from "react";
-
+import TableData from "./TableData";
 function TableSchedule() {
-  const days: string[] = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-  ];
   const timeSlots: string[] = [
     "DAY",
     "8:00 AM - 9:00 AM",
@@ -50,7 +43,6 @@ function TableSchedule() {
   };
 
   return (
-    <div className="w-full h-full">
       <div
         ref={scrollRef}
         className={`w-full overflow-x-auto h-full cursor-${
@@ -61,7 +53,7 @@ function TableSchedule() {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       >
-        <table className="min-w-[1400px] w-full h-full ">
+        <table className="min-w-max  w-full">
           <thead>
             <tr className="text-sm max-sm:text-xs">
               {timeSlots.map((slot, index) => (
@@ -71,19 +63,77 @@ function TableSchedule() {
               ))}
             </tr>
           </thead>
-          <tbody className="text-center text-sm max-sm:text-xs font-medium">
-            {days.map((day, i) => (
-              <tr key={i}>
-                <td>{day}</td>
-                <td colSpan={4} className=""></td>
-                <td>Lunch Break</td>
-                <td colSpan={3} className=""></td>
-              </tr>
-            ))}
+
+          <tbody className="w-full  text-center text-sm max-sm:text-xs font-medium">
+            {/* MONDAY */}
+            <tr>
+              <td >Monday</td>
+              {/* จันทร์เช้า */}
+              <td colSpan={4}>
+                <TableData study_day="MON" period="MORNING"/>
+              </td>
+              <td > Lunch break</td>
+              {/* จันทร์บ่าย */}
+              <td colSpan={3}>
+                <TableData study_day="MON" period="AFTERNOON"/>
+              </td>
+            </tr>
+
+            {/* TUESDAY */}
+            <tr>
+              <td>Tuesday</td>
+              {/* อังคารเช้า */}
+              <td colSpan={4}>
+                <TableData study_day="TUE" period="MORNING"/>
+              </td>
+              <td >Lunch break</td>
+              {/* อังคารบ่าย */}
+              <td colSpan={3}>
+                <TableData study_day="TUE" period="AFTERNOON"/>
+              </td>
+            </tr>
+            {/* WEDNESDAY */}
+            <tr>
+              <td>Wednesday</td>
+              {/* พุธเช้า */}
+              <td colSpan={4}>
+                <TableData study_day="WED" period="MORNING"/>
+              </td>
+              <td >Lunch break</td>
+              {/* พุธบ่าย */}
+              <td colSpan={3}>
+                <TableData study_day="WED" period="AFTERNOON"/>
+              </td>
+            </tr>
+            {/* THURSDAY */}
+            <tr>
+              <td>Thursday</td>
+              {/* พฤหัสเช้า */}
+              <td colSpan={4}>
+                <TableData study_day="THU" period="MORNING"/>
+              </td>
+              <td >Lunch break</td>
+              {/* พฤหัสบ่าย */}
+              <td colSpan={3}>
+                <TableData study_day="THU" period="AFTERNOON"/>
+              </td>
+            </tr>
+            {/* FRIDAY */}
+            <tr>
+              <td>Friday</td>
+              {/* ศุกร์เช้า */}
+              <td colSpan={4}>
+                <TableData study_day="FRI" period="MORNING"/>
+              </td>
+              <td >Lunch break</td>
+              {/* ศุกร์บ่าย */}
+              <td colSpan={3}>
+                <TableData study_day="FRI" period="AFTERNOON"/>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
-    </div>
   );
 }
 

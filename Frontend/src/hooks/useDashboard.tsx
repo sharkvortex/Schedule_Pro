@@ -3,7 +3,8 @@ import { useState , useEffect } from "react"
 
 interface DashboardProps  {
   totalUsers: number,
-  totalSubjects: number
+  totalSubjects: number,
+  totalWorks:number
 }
 
 const useDashboard = () => {

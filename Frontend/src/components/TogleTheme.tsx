@@ -10,17 +10,15 @@ function ToggleTheme() {
   });
 
   useEffect(() => {
-    document.documentElement.classList.add(isDarkMode ? 'dark' : 'light');
-    document.documentElement.classList.remove(isDarkMode ? 'light' : 'dark');
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
-  const toggleTheme = () => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-
-    const newTheme = newMode ? 'dark' : 'light';
-    localStorage.setItem('theme', newTheme);
-  };
+  const toggleTheme = () => setIsDarkMode(prev => !prev);
 
   return (
     <button

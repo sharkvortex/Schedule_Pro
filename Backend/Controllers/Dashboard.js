@@ -4,9 +4,10 @@ const prisma = new PrismaClient();
 
 export const CountData = async (request, reply) => {
   try {
-    const [totalUsers, totalSubjects] = await Promise.all([
+    const [totalUsers, totalSubjects , totalWorks] = await Promise.all([
       prisma.user.count(),
       prisma.subjects.count(),
+      prisma.works.count(),
     ]);
 
     return reply.status(200).send({
@@ -14,6 +15,7 @@ export const CountData = async (request, reply) => {
       data: {
         totalUsers,
         totalSubjects,
+        totalWorks,
       },
     });
 

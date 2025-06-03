@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
 import { Mail, Lock, User, BadgeCheck, IdCard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { useRegister } from "../hooks/useRegister";
 import { useNavigate } from "react-router-dom";
 import Loading from "./UI/Loading";
+import GoogleLoginButton from "../hooks/Google/GoogleLoginButton";
 type FormRegisterProps = {
   studentId: string;
   firstName: string;
@@ -217,14 +217,8 @@ function FormRegister() {
             </p>
           </div>
 
-          <button
-            type="button"
-            className="flex text-sm items-center justify-center gap-2 w-full bg-white text-black font-medium py-2 rounded-lg shadow hover:bg-gray-100 hover:cursor-pointer transition-colors"
-          >
-            <FcGoogle className="text-xl" />
-            Sign up with Google
-          </button>
-
+          {/* GOOGLE AUTH */}
+          <GoogleLoginButton />
           <div className="relative flex items-center">
             <div className="flex-grow border-t border-gray-600"></div>
             <span className="flex-shrink mx-4 text-gray-400">

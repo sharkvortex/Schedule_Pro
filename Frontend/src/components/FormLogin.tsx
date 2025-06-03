@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 import { toast } from "react-hot-toast";
 import Loading from "./UI/Loading";
+import GoogleLoginButton from "../hooks/Google/GoogleLoginButton";
 type FormLoginProps = {
   username: string;
   password: string;
@@ -126,7 +127,7 @@ function FormLogin() {
                 <span>Remember me</span>
               </label>
               <a
-                href="#"
+                href="/auth/resetpassword"
                 className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
               >
                 Forgot password?
@@ -154,32 +155,9 @@ function FormLogin() {
               </span>
               <div className="flex-grow border-t border-gray-600"></div>
             </div>
-
-            <div className="flex space-x-4">
-              <button className="flex-1 flex justify-center items-center gap-2 py-2 border border-gray-600 rounded-lg hover:bg-gray-700 hover:text-white hover:cursor-pointer transition-colors">
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path
-                    fill="#EA4335"
-                    d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z"
-                  />
-                  <path
-                    fill="#4A90E2"
-                    d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.277 14.268a7.12 7.12 0 0 1-.411-2.364 7.12 7.12 0 0 1 .411-2.364l-4.04-3.115A11.954 11.954 0 0 0 0 12c0 1.93.456 3.752 1.24 5.335l4.038-3.067Z"
-                  />
-                </svg>
-                <span>Google</span>
-              </button>
-            </div>
           </div>
         </form>
+        <GoogleLoginButton/>
         <p className="text-center text-sm text-gray-400">
           Don't have an account?{" "}
           <Link

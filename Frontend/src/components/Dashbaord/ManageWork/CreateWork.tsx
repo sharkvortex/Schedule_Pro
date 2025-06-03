@@ -1,5 +1,5 @@
 import { X, Save, Link, ImagePlus } from "lucide-react";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useSubject } from "../../../hooks/admin/useSubject";
 import { useCreateWork } from "../../../hooks/admin/Work/useCreateWork";
@@ -7,6 +7,7 @@ import Loading from "../../UI/Loading";
 export interface CreateWorkProps {
   setIsCreate: React.Dispatch<React.SetStateAction<boolean>>;
   isCreate: boolean;
+  refetch: ()=> void;
 }
 
 export interface CreateWorkDataType {
@@ -18,8 +19,9 @@ export interface CreateWorkDataType {
   link: string;
   image: File[] | null;
   linkCode: string;
+  
 }
-function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
+function CreateWork({ setIsCreate, isCreate , refetch }: CreateWorkProps) {
   const { subjects } = useSubject();
   const { createWork, creating } = useCreateWork();
   const defaultFormData: CreateWorkDataType = {
@@ -33,7 +35,6 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
     linkCode: "",
   };
   const [formData, setFormData] = useState<CreateWorkDataType>(defaultFormData);
-
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -42,6 +43,7 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
     const { name, value, files, type } = e.target as HTMLInputElement;
 
     if (type === "file" && files) {
+
       setFormData((prev) => ({
         ...prev,
         [name]: Array.from(files),
@@ -55,27 +57,42 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (
-      !formData.subject_id ||
-      !formData.title ||
-      !formData.assignedDate ||
-      !formData.dueDate
-    ) {
-      toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+  if (
+    !formData.subject_id ||
+    !formData.title ||
+    !formData.assignedDate ||
+    !formData.dueDate
+  ) {
+    toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+    return;
+  }
+
+  if (formData.image) {
+    if (formData.image.length > 10) {
+      toast.error("เลือกได้ไม่เกิน 10 รูป");
       return;
     }
-    try {
-      const response = await createWork(formData);
-      if (response.status === 200) {
-        setFormData(defaultFormData);
-        setIsCreate(false);
+    for (const file of formData.image) {
+      if (file.size > 20 * 1024 * 1024) {
+        toast.error(`ไฟล์ ${file.name} ขนาดเกิน 20MB`);
+        return;
       }
-    } catch (error) {
-      console.log(error);
     }
-  };
+  }
+
+  try {
+    const response = await createWork(formData);
+    if (response.status === 200) {
+      setFormData(defaultFormData);
+      setIsCreate(false);
+      refetch();
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
   return (
     <>
       {isCreate && (
@@ -87,7 +104,7 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
               <h2 className="text-xl font-medium">📝 สร้างงานใหม่</h2>
               <button
                 onClick={() => setIsCreate(!isCreate)}
-                className="text-gray-500 hover:text-red-500 hover:cursor-pointer transition"
+                className="hover:text-red-500 hover:cursor-pointer transition"
               >
                 <X className="w-7 h-7" />
               </button>
@@ -95,7 +112,7 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700  mb-1">
+                <label className="block text-sm font-medium mb-1">
                   วิชา
                 </label>
                 <select
@@ -124,7 +141,7 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700  mb-1">
+                <label className="block text-sm font-medium   mb-1">
                   หัวข้อ
                 </label>
                 <input
@@ -138,7 +155,7 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium  mb-1">
                   รายละเอียด
                 </label>
                 <textarea
@@ -153,7 +170,7 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium  mb-1">
                     วันที่สั่ง
                   </label>
                   <div className="relative">
@@ -168,7 +185,7 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium  mb-1">
                     กำหนดส่ง
                   </label>
                   <div className="relative">
@@ -184,7 +201,7 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium  mb-1">
                   ลิ้งก์ (ถ้ามี)
                 </label>
                 <div className="relative">
@@ -201,14 +218,14 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium  mb-1">
                   รูปภาพ
                 </label>
                 <div className="flex items-center gap-3">
                   <input
                     type="file"
                     accept="image/*"
-                    className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100"
+                    className="block w-full text-sm  file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100"
                     name="image"
                     onChange={handleChange}
                     multiple
@@ -218,7 +235,7 @@ function CreateWork({ setIsCreate, isCreate }: CreateWorkProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium mb-1">
                   ลิ้งก์โค้ด (ถ้ามี)
                 </label>
                 <div className="relative">

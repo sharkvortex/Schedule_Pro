@@ -12,7 +12,7 @@ function Home() {
           content="Welcome to SchedulePro – your personal assistant for managing class schedules and tasks with ease."
         />
       </Helmet>
-      <main className="w-full h-screen">
+      <main className="w-full min-h-screen">
         <div className="flex w-full h-full">
           <Navbar />
           <TableSchedule />

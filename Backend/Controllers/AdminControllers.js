@@ -1,7 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import ImageKit from "imagekit";
-
+const imagekit = new ImageKit({
+  publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
+  urlEndpoint: process.env.IMAGE_KIT_URL_ENDPOINT,
+});
 // GET USERS
 export const getUsers = async (request, reply) => {
   const { search = "", page = 1, limit = 10 } = request.query;
@@ -172,42 +176,6 @@ export const deleteUser = async (request, reply) => {
   } catch (error) {
     console.error(error);
     return reply.code(500).send({ message: "Something went wrong" });
-  }
-};
-
-// GET ALL SUBJECTS
-export const getSubjects = async (request, reply) => {
-  try {
-    const subjects = await prisma.subjects.findMany();
-
-    const dayOrder = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
-    const periodOrder = ["MORNING", "AFTERNOON", "EVENING"];
-
-    const sortedSubjects = subjects.sort((a, b) => {
-      const dayDiff =
-        dayOrder.indexOf(a.study_day) - dayOrder.indexOf(b.study_day);
-      if (dayDiff !== 0) return dayDiff;
-
-      const periodDiff =
-        periodOrder.indexOf(a.period) - periodOrder.indexOf(b.period);
-      if (periodDiff !== 0) return periodDiff;
-
-      return a.time_start.localeCompare(b.time_start);
-    });
-
-    return reply.status(200).send({
-      message:
-        sortedSubjects.length === 0
-          ? "No subjects found."
-          : "Subjects fetched successfully.",
-      data: sortedSubjects,
-    });
-  } catch (error) {
-    console.error("Error fetching subjects:", error);
-    return reply.status(500).send({
-      message: "Failed to fetch subjects.",
-      error: process.env.NODE_ENV === "development" ? error.message : undefined,
-    });
   }
 };
 
@@ -395,12 +363,6 @@ export const deleteSubject = async (request, reply) => {
   }
 };
 
-const imagekit = new ImageKit({
-  publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
-  privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
-  urlEndpoint: process.env.IMAGE_KIT_URL_ENDPOINT,
-});
-
 // CREATEWORK
 export const createWork = async (request, reply) => {
   const parts = request.parts();
@@ -487,14 +449,18 @@ export const createWork = async (request, reply) => {
   }
 };
 
-
 // GET WORK
 export const getWorks = async (request, reply) => {
+  const { subject_id } = request.query;
+
   try {
     const works = await prisma.works.findMany({
+      where: subject_id
+        ? { subject_id } 
+        : undefined,     
       include: {
         images: true,
-        subject: true
+        subject: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -510,8 +476,130 @@ export const getWorks = async (request, reply) => {
   }
 };
 
-// DELETE IMAGE
 
+// EDIT WORK
+export const editWork = async (request, reply) => {
+  const parts = request.parts();
+
+  const fields = {};
+  const files = [];
+
+  for await (const part of parts) {
+    if (part.file) {
+      files.push({
+        filename: part.filename,
+        mimetype: part.mimetype,
+        buffer: await part.toBuffer(),
+      });
+    } else {
+      fields[part.fieldname] = part.value;
+    }
+  }
+
+  try {
+    const workId = Number(fields.id);
+    if (isNaN(workId)) {
+      return reply.code(400).send({ error: "Invalid work ID" });
+    }
+
+    const existingWork = await prisma.works.findUnique({
+      where: { id: workId },
+    });
+
+    if (!existingWork) {
+      return reply.code(404).send({ error: "Work not found" });
+    }
+
+    const updateData = {};
+    if (fields.title && fields.title !== existingWork.title) {
+      updateData.title = fields.title;
+    }
+    if (fields.description && fields.description !== existingWork.description) {
+      updateData.description = fields.description;
+    }
+    if (fields.assignedDate && new Date(fields.assignedDate).toISOString() !== existingWork.assignedDate.toISOString()) {
+      updateData.assignedDate = new Date(fields.assignedDate);
+    }
+    if (fields.dueDate && new Date(fields.dueDate).toISOString() !== existingWork.dueDate.toISOString()) {
+      updateData.dueDate = new Date(fields.dueDate);
+    }
+    if (fields.link && fields.link !== existingWork.link) {
+      updateData.link = fields.link;
+    }
+    if (fields.linkCode && fields.linkCode !== existingWork.linkCode) {
+      updateData.linkCode = fields.linkCode;
+    }
+
+    if (Object.keys(updateData).length > 0) {
+      await prisma.works.update({
+        where: { id: workId },
+        data: updateData,
+      });
+    }
+
+   
+    if (files.length > 0) {
+      const uploadPromises = files.map(file =>
+        imagekit.upload({
+          file: file.buffer,
+          fileName: file.filename,
+        })
+      );
+
+      const uploadResults = await Promise.all(uploadPromises);
+
+      const imageData = uploadResults.map(result => ({
+        workId: workId,
+        url: result.url,
+        fileId: result.fileId,
+      }));
+
+      await prisma.images.createMany({
+        data: imageData,
+      });
+    }
+
+    return reply.status(200).send({ message: "Work updated successfully" });
+
+  } catch (error) {
+    console.error("Error in editWork:", error);
+    return reply.code(500).send({ error: "Something went wrong" });
+  }
+};
+
+// DELETE WORK
+export const deleteWork = async (request, reply) => {
+  const { id } = request.params;
+
+  try {
+    const images = await prisma.images.findMany({
+      where: { workId: Number(id) },
+      select: { fileId: true },
+    });
+
+    if (images.length > 0) {
+      await Promise.all(
+        images.map((img) => imagekit.deleteFile(img.fileId))
+      );
+    }
+
+    await prisma.works.delete({
+      where: { id: Number(id) },
+    });
+
+    return reply.send({
+      message:
+        images.length > 0
+          ? "ลบงานและรูปภาพสำเร็จ"
+          : "ลบงานสำเร็จ",
+    });
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาด:", error);
+    return reply.status(500).send({ message: "เกิดข้อผิดพลาดในการลบงาน" });
+  }
+};
+
+// DELETE IMAGE
 export const deleteImage = async (request, reply) => {
   const { fileId } = request.params;
 

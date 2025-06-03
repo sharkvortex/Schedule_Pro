@@ -49,9 +49,9 @@ function UserList({ search }: PropsType) {
   }
 
   const EditUser = (user: UsersProps) => {
-  setIsOpen(true);
-  setDataEdit(user);
-};
+    setIsOpen(true);
+    setDataEdit(user);
+  };
 
   const [userIdToDelete, setUserIdToDelete] = useState<number | null>(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -109,15 +109,15 @@ function UserList({ search }: PropsType) {
           onDelete={handleDelete}
         />
       )}
-      <div className="w-full overflow-x-auto mx-auto  shadow-md rounded-lg p-4">
+      <div className="w-full overflow-x-auto">
         {loading ? (
           <div className="w-full min-h-[600px] flex items-center justify-center">
             <Loading />
           </div>
         ) : (
           <>
-            <div className="w-full min-h-[80vh] relative">
-              <table className="min-w-[800px] h-full  w-full text-sm rounded-t overflow-hidden rounded-lg">
+            <div className="w-full relative">
+              <table className="min-w-[832px] h-full rounded-t overflow-hidden w-full text-sm">
                 <thead className="bg-blue-500 text-white text-xs">
                   <tr>
                     <th className="px-4 py-3 text-left">รหัสนักศึกษา</th>
@@ -132,17 +132,34 @@ function UserList({ search }: PropsType) {
                 <tbody className="w-full">
                   {data.length === 0 ? (
                     <>
-                      <tr className="w-full flex justify-center p-2">
-                        <td className="w-full">ไม่พบข้อมูลผู้ใช้</td>
+                      <tr>
+                        <td colSpan={100}>
+                          <div className="flex items-center justify-center p-4 text-gray-500">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 mr-2 text-gray-400"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 
+             3.582-8 8 3.582 8 8 8z"
+                              />
+                            </svg>
+                            ไม่พบข้อมูลผู้ใช้
+                          </div>
+                        </td>
                       </tr>
                     </>
                   ) : (
                     <>
                       {data?.map((user) => (
                         <tr key={user.id}>
-                          <td className="px-4 py-5">
-                            {user.studentId}
-                          </td>
+                          <td className="px-4 py-5">{user.studentId}</td>
                           <td className="px-4 py-3">{user.username}</td>
                           <td className="px-4 py-3">{user.firstName}</td>
                           <td className="px-4 py-3">{user.lastName}</td>
@@ -154,27 +171,26 @@ function UserList({ search }: PropsType) {
                           >
                             {user.role}
                           </td>
-                          <td className="px-4 py-3 text-center flex items-center justify-center space-x-4">
-                            <button
-                              className="text-gray-500 py-3  hover:text-blue-500 transition"
-                              title="Edit"
-                            >
-                              <FaEdit
+                          <td className="py-3 px-4 text-center">
+                            <div className="flex items-center justify-center gap-3">
+                              <button
                                 onClick={() => EditUser(user)}
-                                className="text-base cursor-pointer"
-                              />
-                            </button>
-                            <button
-                              className="text-gray-500 hover:text-red-500 transition"
-                              title="Delete"
-                            >
-                              <FaTrash
+                                title="Edit"
+                                className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600 transition duration-200 hover:cursor-pointer"
+                              >
+                                <FaEdit className="text-base" />
+                              </button>
+
+                              <button
                                 onClick={() =>
                                   DeleteUserHandler(user.id, user.username)
                                 }
-                                className="text-base cursor-pointer"
-                              />
-                            </button>
+                                title="Delete"
+                                className="w-9 h-9 flex items-center justify-center rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-600 transition duration-200 hover:cursor-pointer"
+                              >
+                                <FaTrash className="text-base" />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}

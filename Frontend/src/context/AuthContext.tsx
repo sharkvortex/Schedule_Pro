@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setUser(null);
         setIsLogin(false);
       }
+
     } catch (error) {
       setUser(null);
       setIsLogin(false);

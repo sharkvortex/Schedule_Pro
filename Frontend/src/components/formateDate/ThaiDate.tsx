@@ -1,16 +1,16 @@
 interface ThaiDateProps {
-  date: string | Date | number; 
-  fullMonth?: boolean; 
-  buddhistYear?: boolean; 
-  shortYear?: boolean; 
+  date: string | Date | number;
+  fullMonth?: boolean;
+  buddhistYear?: boolean;
+  shortYear?: boolean;
 }
 
-const ThaiDate: React.FC<ThaiDateProps> = ({
+export const ThaiDate = ({
   date,
   fullMonth = false,
   buddhistYear = true,
   shortYear = true,
-}) => {
+}: ThaiDateProps): string => {
   const dateObj = new Date(date);
 
   const monthNamesShort = [
@@ -31,11 +31,7 @@ const ThaiDate: React.FC<ThaiDateProps> = ({
   if (buddhistYear) displayYear += 543;
   if (shortYear) displayYear = displayYear % 100;
 
-  return (
-    <span>
-      {day} {fullMonth ? monthNamesFull[month] : monthNamesShort[month]} {displayYear}
-    </span>
-  );
-};
+  const monthName = fullMonth ? monthNamesFull[month] : monthNamesShort[month];
 
-export default ThaiDate;
+  return `${day} ${monthName} ${displayYear}`;
+};

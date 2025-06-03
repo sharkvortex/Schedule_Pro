@@ -1,14 +1,15 @@
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 import CreateWork from "./CreateWork";
 import ListWorks from "./ListWorks";
 import { useEffect, useState } from "react";
 import { useSubject } from "../../../hooks/admin/useSubject";
+import { useGetWork } from "../../../hooks/admin/Work/useGetWork";
 function ManageWorks() {
   const [isCreate, setIsCreate] = useState<boolean>(false);
   const [isEditWork, setIsEditWork] = useState<boolean>(false);
   const { subjects } = useSubject();
-  const [searchInput, setSearchInput] = useState<string>("");
-
+  const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const {getWork , workData} = useGetWork()
   useEffect(() => {
     if (isCreate) {
       setIsEditWork(false);
@@ -20,6 +21,11 @@ function ManageWorks() {
       setIsCreate(false);
     }
   }, [isEditWork]);
+
+  useEffect(() => {
+    getWork(selectedSubject)
+  },[selectedSubject])
+
   return (
     <>
       <div className="w-full p-6 space-y-6">
@@ -44,43 +50,32 @@ function ManageWorks() {
                 <select
                   name="studentId"
                   className="w-max rounded-lg border border-gray-400 cursor-pointer p-2 px-4 normal-bg outline-0"
+                  onChange={(e) => setSelectedSubject(e.target.value)}
                 >
                   <option className="p-2" value="">
-                    เลือกวิชา
+                    ทั้งหมด
                   </option>
                   {subjects?.map((subject) => (
                     <option
                       key={subject.id}
                       value={subject.subject_id}
-                    >{`${subject.subject_id} || ${subject.subject_name} `}</option>
+                    >{`${subject.subject_id} || ${subject.subject_name}`}</option>
                   ))}
                 </select>
-              </div>
-
-              {/* Search */}
-              <div className="max-[950px]:w-full  relative ">
-                <span className="absolute left-6 top-1/2 -translate-y-1/2 ">
-                  <Search className="w-4 h-4" />
-                </span>
-                <input
-                  name="search"
-                  type="text"
-                  placeholder="ค้นหางานหรือหัวข้อ..."
-                  className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-400 placeholder:text-gray-500 outline-0"
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  value={searchInput}
-                />
               </div>
             </div>
           )}
 
-          <CreateWork isCreate={isCreate} setIsCreate={setIsCreate} />
+          <CreateWork isCreate={isCreate} setIsCreate={setIsCreate} 
+          refetch={()=> {setSelectedSubject(''),getWork()}} />
           {!isCreate && (
             <ListWorks
               isEditWork={isEditWork}
               setIsEditWork={setIsEditWork}
               isCreate={isCreate}
               setIsCreate={setIsCreate}
+              workData={workData}
+              refetch={()=> {setSelectedSubject(''),getWork()}}
             />
           )}
         </div>

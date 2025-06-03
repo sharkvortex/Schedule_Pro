@@ -1,13 +1,11 @@
 import {
   FilePlus,
-  Activity,
-  Settings,
   BarChart3,
   Layers,
   Users,
-  Shield,
   XIcon,
-  LibraryBig
+  LibraryBig,
+  Home,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { RiMenuFold2Line } from "react-icons/ri";
@@ -40,6 +38,11 @@ function SliderDashboard() {
 
   const menuItems = [
     {
+      icon: <Home className="w-5 h-5 mr-3" />,
+      label: "หน้าหลัก",
+      link: "/",
+    },
+    {
       icon: <BarChart3 className="w-5 h-5 mr-3" />,
       label: "แดชบอร์ด",
       link: "/dashboard",
@@ -59,21 +62,7 @@ function SliderDashboard() {
       label: "จัดการงาน",
       link: "/dashboard/manage-works",
     },
-    {
-      icon: <Activity className="w-5 h-5 mr-3" />,
-      label: "รายงานระบบ",
-      link: "/dashboard/system",
-    },
-    {
-      icon: <Settings className="w-5 h-5 mr-3" />,
-      label: "ตั้งค่า",
-      link: "/dashboard/setting",
-    },
-    {
-      icon: <Shield className="w-5 h-5 mr-3" />,
-      label: "การรักษาความปลอดภัย",
-      link: "/dashboard/security",
-    },
+    
   ];
 
   return (

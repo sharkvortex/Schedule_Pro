@@ -3,7 +3,7 @@
 
 :root {
   --background-light: #ffffff;
-  --text-light: #242424;
+  --text-light: #525151;
   --background-dark: #000000;
   --text-dark: #ffffff;
   --highlight-color-light: #ff7043;
@@ -14,8 +14,11 @@ input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-  -webkit-text-fill-color: rgb(71, 71, 71) !important;
+  -webkit-text-fill-color: rgb(71, 71, 71) !important;  /* เพิ่มสีข้อความ */
   transition: background-color 9999s ease-in-out 0s;
+}
+input, textarea {
+  caret-color: gray; /* เปลี่ยนสีเคอร์เซอร์เป็นสีแดง */
 }
 
 html,
@@ -24,93 +27,60 @@ body {
   font-style: normal;
 }
 
-.light body {
+html {
+  background-color: var(--background-light);
+  color: var(--text-light);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.light h1,
-.light h2,
-.light h3 {
+
+html.dark {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3 {
   color: var(--text-light);
   font-weight: 700;
 }
-.light .navbar {
+
+html.dark h1,
+html.dark h2,
+html.dark h3 {
+  color: var(--text-dark);
+}
+
+
+html:not(.dark) .navbar {
   background-color: var(--background-light);
   color: var(--text-light);
 }
-.light .navbar-bg {
+html.dark .navbar {
   background-color: var(--background-dark);
   color: var(--text-dark);
 }
-.light .normal-bg {
-  background-color: var(--background-light);
-  color: var(--text-light)!important;
-}
-
-.light .swap-bg {
+html.dark .normal-bg {
   background-color: var(--background-dark);
   color: var(--text-dark);
 }
 
-
-.light .loader {
-  background-color: #ffffff6e;
-  color: var(--text-light);
-}
-
-.light .btn-primary {
-  background-color: var(--highlight-color-light);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-
-.light .highlight {
-  color: var(--highlight-color-light);
-}
-
-.dark body {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.dark h1,
-.dark h2,
-.dark h3 {
-  color: var(--text-dark);
-}
-
-.dark .btn-primary {
-  background-color: var(--highlight-color-dark);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-.dark .navbar {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-}
-.dark .navbar-bg {
+.normal-bg{
   background-color: var(--background-light);
   color: var(--text-light);
 }
-.dark .normal-bg {
-  background-color: var(--background-dark);
-  color: var(--text-dark) !important;
+.gist-file {
+  background-color: #1e1e1e !important;
+  color: #ccc !important;
 }
-.dark .swap-bg {
-  background-color: var(--background-light);
-  color: var(--text-dark);
+.gist-file .blob-code {
+  background-color: transparent !important;
+  color: #ddd !important;
 }
-
-.dark .loader {
-  background-color: #0a0e1879;
-  color: var(--text-dark);
-}
-
-.dark .highlight {
-  color: var(--highlight-color-dark);
+.gist-file .blob-num {
+  color: #666 !important;
 }
 
 /* Scorll bar */

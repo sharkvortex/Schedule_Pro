@@ -1,29 +1,31 @@
-import React, { useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
 interface RequireRoleProps {
   children: React.ReactNode;
-  allowedRoles: string[]; 
+  allowedRoles: string[];
 }
 
 const ProtectedRoute: React.FC<RequireRoleProps> = ({ children, allowedRoles }) => {
   const auth = useAuth();
-  const hasRedirected = useRef(false);
+  const [redirectPath, setRedirectPath] = useState<string | null>(null);
 
-  const userRole = auth?.user?.role || "";
-  if (!auth?.user && !hasRedirected.current) {
-    hasRedirected.current = true;
-    toast.error("Please login first");
-    return <Navigate to="/login" />;
-  }
+  useEffect(() => {
+    if (auth?.isLoading) return;
 
-  
-  if (userRole !== "admin" && !allowedRoles.includes(userRole) && !hasRedirected.current) {
-    hasRedirected.current = true;
-    toast.error("You don't have permission");
-    return <Navigate to="/" />;
+    if (!auth?.user) {
+      toast.error("กรุณาเข้าสู่ระบบ");
+      setRedirectPath("/login");
+    } else if (!allowedRoles.includes(auth.user.role)) {
+      toast.error("ไม่มีสิทธิ์เข้าถึง!");
+      setRedirectPath("/");
+    }
+  }, [auth?.isLoading, auth?.user, allowedRoles]);
+
+  if (redirectPath) {
+    return <Navigate to={redirectPath} replace />;
   }
 
   return <>{children}</>;

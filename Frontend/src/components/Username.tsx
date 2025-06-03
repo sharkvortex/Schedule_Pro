@@ -2,13 +2,14 @@ import { useEffect, useState, useRef } from "react";
 import { FaUser, FaShieldAlt, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { ChevronDown, ChevronUp , LayoutDashboard } from "lucide-react";
+import { ChevronDown, ChevronUp, LayoutDashboard } from "lucide-react";
 import { useLogout } from "../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
 function Username() {
   const navigate = useNavigate();
   const auth = useAuth();
-  const [username, setUsername] = useState("guest");
+  const [firstName, setFirstName] = useState("guest");
+  const [lastName, setLastName] = useState("");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -16,10 +17,10 @@ function Username() {
 
   useEffect(() => {
     if (auth) {
-      setUsername(auth.user?.username || "guest");
+      setFirstName(auth.user?.firstName || "");
+      setLastName(auth.user?.lastName || "");
     }
   }, [auth?.user]);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -87,7 +88,7 @@ function Username() {
               onClick={() => setIsProfileOpen((prev) => !prev)}
               className="flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-md transition-all duration-300 hover:cursor-pointer hover:text-blue-500 group"
             >
-              <span className="mr-1">{username}</span>
+              <span className="mr-1">{firstName}</span>
               <span className="h-5 w-5 flex items-center justify-center">
                 {isProfileOpen ? (
                   <ChevronUp size={16} />
@@ -106,55 +107,85 @@ function Username() {
           </div>
 
           {isProfileOpen && (
-            <div className="absolute top-full right-0 mt-2 w-56 navbar-bg border border-gray-200 shadow-lg rounded-lg z-50 text-sm overflow-hidden transform origin-top-right transition-all duration-200 animate-fadeIn">
-              <div className="px-4 py-4 border-b border-gray-100">
-                <div className="flex items-center mb-2">
-                  <div className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                    <FaUser className="text-gray-500" />
+            <div className="absolute top-full -left-15 mt-2 w-70 bg-white shadow-2xl rounded-2xl z-50 text-sm overflow-hidden transform origin-top-right transition-all duration-300 ease-out ">
+              {/* Header Section */}
+              <div className="relative  px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-600">
+                <div className="absolute inset-0 bg-black opacity-5"></div>
+                <div className="relative">
+                  <div className="flex items-center mb-3 gap-4">
+                    <div className="h-7 w-7 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-2 border-white/30 shadow-lg">
+                      <FaUser className="text-white text-sm w-3 h-3" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm text-white">
+                        {firstName + " " + lastName}
+                      </p>
+                      <p className="text-xs text-blue-100 opacity-90">
+                        {auth.user?.email}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-base">{username}</p>
-                    <p className="text-xs mt-1 opacity-75">
-                      {auth.user?.email || "user@example.com"}
-                    </p>
+                  <div className="flex justify-start">
+                    <span
+                      className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full bg-white/20 backdrop-blur-sm text-white border border-white/30 gap-2 shadow-sm`}
+                    >
+                      <FaShieldAlt className="w-3 h-3" />
+                      {auth.user?.role}
+                    </span>
                   </div>
-                </div>
-                <div className="mt-2">
-                  <span
-                    className={`inline-flex items-center px-2 py-1 text-xs rounded-full ${roleClass} bg-opacity-10`}
-                  >
-                    <FaShieldAlt className="mr-1 text-xs" />
-                    {auth.user?.role}
-                  </span>
                 </div>
               </div>
 
-              <div className="py-1">
-                <Link to={"/user/setting"}>
-                  <button className="w-full text-left px-4 py-3 font-medium hover:cursor-pointer hover:bg-blue-500 hover:text-white transition-all duration-200 flex items-center">
-                    <FaCog className="mr-3 w-5" />
-                    <span>ตั้งค่าบัญชี</span>
+              {/* Menu Items */}
+              <div className="py-2">
+                <Link to={"/user/profile"}>
+                  <button className="w-full text-left px-6 py-3.5 font-medium text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 flex items-center gap-4 transition-all duration-200 group hover:cursor-pointer">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-blue-100 group-hover:text-blue-600 transition-all duration-200">
+                      <FaCog className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-xs sm:text-sm">ตั้งค่าบัญชี</span>
+                      <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                        จัดการข้อมูลส่วนตัว
+                      </p>
+                    </div>
                   </button>
                 </Link>
-              </div>
-              {auth.user?.role === "admin" && (
-                <div className="py-1">
+
+                {auth.user?.role === "admin" && (
                   <Link to={"/dashboard"}>
-                    <button className="w-full text-left px-4 py-3 font-medium hover:cursor-pointer hover:bg-blue-500 hover:text-white transition-all duration-200 flex items-center">
-                      <LayoutDashboard className="mr-3 w-5" />
-                      <span>Dashboard</span>
+                    <button className="w-full text-left px-6 py-3.5 font-medium text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 flex items-center gap-4 transition-all duration-200 group hover:cursor-pointer">
+                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-purple-100 group-hover:text-purple-600 transition-all duration-200">
+                        <LayoutDashboard className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-xs sm:text-sm">แดชบอร์ด</span>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                          จัดการระบบ
+                        </p>
+                      </div>
                     </button>
                   </Link>
-                </div>
-              )}
+                )}
 
-              <div className="py-1 border-t border-gray-100">
+                {/* Divider */}
+                <div className="my-2 px-6">
+                  <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+                </div>
+
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-3 font-medium hover:cursor-pointer hover:bg-red-500 hover:text-white transition-all duration-200 flex items-center"
+                  className="w-full text-left px-6 py-3.5 font-medium text-red-600 hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 flex items-center gap-4 transition-all duration-200 group hover:cursor-pointer"
                 >
-                  <FaSignOutAlt className="mr-3" />
-                  <span>ออกจากระบบ</span>
+                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center group-hover:bg-red-200 transition-all duration-200">
+                    <FaSignOutAlt className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs sm:text-sm">ออกจากระบบ</span>
+                    <p className="text-xs sm:text-sm text-red-400 mt-0.5">
+                      ออกจากบัญชีผู้ใช้
+                    </p>
+                  </div>
                 </button>
               </div>
             </div>

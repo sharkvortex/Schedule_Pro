@@ -33,7 +33,7 @@ function ManageUser() {
         </div>
       </div>
 
-      <div className="overflow-x-auto shadow-md rounded">
+      <div className="min-h-[832px] overflow-x-auto">
         <UserList search={search}/>
       </div>
     </div>

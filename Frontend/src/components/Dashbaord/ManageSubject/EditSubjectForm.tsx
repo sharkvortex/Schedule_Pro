@@ -222,7 +222,7 @@ const InputField = ({
   type?: string;
 }) => (
   <div>
-    <label className="block mb-2 font-medium text-gray-700 ">{label}</label>
+    <label className="block mb-2 font-medium">{label}</label>
     <div className="flex items-center border rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 focus-within:ring-2 focus-within:ring-blue-500 transition-all">
       <span className="text-white">{icon}</span>
       <input
@@ -250,7 +250,7 @@ const SelectField = ({
   options: { label: string; value: string }[];
 }) => (
   <div>
-    <label className="block mb-2 font-medium text-gray-600">{label}</label>
+    <label className="block mb-2 font-medium ">{label}</label>
     <div className="relative">
       <select
         name={name}

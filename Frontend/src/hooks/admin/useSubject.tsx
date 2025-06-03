@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-interface SubjectType {
+export interface SubjectType {
   id: number;
   subject_id: string;
   subject_name: string;
@@ -15,7 +15,7 @@ interface SubjectType {
 
 export const useSubject = () => {
   const [subjects, setSubjects] = useState<SubjectType[] | null>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchSubjects = async () => {

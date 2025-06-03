@@ -109,7 +109,9 @@ function SubjectList() {
         />
       )}
       <div className="w-full flex items-center justify-between px-2 py-3">
-        <h1 className="text-2xl max-sm:text-lg font-bold px-3">จัดการรายวิชา</h1>
+        <h1 className="text-2xl max-sm:text-lg font-bold px-3">
+          จัดการรายวิชา
+        </h1>
         <button
           onClick={() => setCreateOpen(!createOpen)}
           className="text-sm rounded px-10 py-2 bg-blue-600 text-white flex  items-center gap-2 my-3 hover:bg-blue-700 transition-colors duration-200 shadow-md hover:cursor-pointer"
@@ -162,22 +164,25 @@ function SubjectList() {
                           {subject.time_start + "-" + subject.time_end}
                         </td>
                         <td className="px-4 py-3">{subject.room}</td>
-                        <td className="px-4 py-3 text-center space-x-2 flex justify-center items-center">
-                          <div>
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex items-center justify-center gap-3">
+                           
                             <button
                               onClick={() => onEditSubject(subject)}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm transition hover:cursor-pointer hover:text-blue-500"
+                              title="Edit"
+                              className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-100 text-blue-500 hover:bg-blue-200 hover:text-blue-600 transition duration-200 hover:cursor-pointer"
                             >
                               <Pencil className="w-4 h-4" />
                             </button>
-                          </div>
-                          <div>
+
+                          
                             <button
                               onClick={() => {
                                 setIsDeleteOpen(true);
                                 setDeleteID(subject.id);
                               }}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm transition hover:cursor-pointer hover:text-red-500"
+                              title="Delete"
+                              className="w-9 h-9 flex items-center justify-center rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-600 transition duration-200 hover:cursor-pointer"
                             >
                               <Trash className="w-4 h-4" />
                             </button>

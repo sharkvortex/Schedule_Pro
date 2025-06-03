@@ -1,16 +1,21 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken'
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 
 export const Authentication = async (request, reply) => {
   try {
     const authHeader = request.headers.authorization;
-    const tokenFromHeader = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+    const tokenFromHeader = authHeader?.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : null;
+
     const token = request.cookies.schedule_pro || tokenFromHeader;
 
     if (!token) {
-      return reply.status(401).send({ message: 'No token provided', Login: false });
+      return reply
+        .status(401)
+        .send({ message: "No token provided", Login: false });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -21,37 +26,56 @@ export const Authentication = async (request, reply) => {
     });
 
     if (!user) {
-      return reply.status(401).send({ message: 'User not found', Login: false });
+      return reply
+        .status(401)
+        .send({ message: "User not found", Login: false });
     }
 
-    if (decoded.role !== user.role) {
+    const fieldsChanged =
+      decoded.firstName !== user.firstName ||
+      decoded.lastName !== user.lastName ||
+      decoded.username !== user.username ||
+      decoded.email !== user.email ||
+      decoded.role !== user.role;
+
+    if (fieldsChanged) {
       const newToken = jwt.sign(
-        { id: user.id,username:user.username , email: user.email, role: user.role },
+        {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+        },
         process.env.JWT_SECRET,
-        { expiresIn: '1d' }
+        { expiresIn: "1d" }
       );
 
-      reply.setCookie('schedule_pro', newToken, {
+      reply.setCookie("schedule_pro", newToken, {
         httpOnly: true,
-        sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
         maxAge: 60 * 60 * 24, 
       });
 
       request.user = jwt.verify(newToken, process.env.JWT_SECRET);
 
-      return reply.status(200).send({ user: request.user, Login: true, message: 'Token updated due to role change' });
+      return reply.status(200).send({
+        user: request.user,
+        Login: true,
+        message: "Token updated due to user data change",
+      });
     }
 
     request.user = decoded;
-
     return reply.status(200).send({ user: decoded, Login: true });
   } catch (error) {
     return reply.status(401).send({
-      message: 'Invalid or expired token',
+      message: "Invalid or expired token",
       error: error.message,
-      Login: false
+      Login: false,
     });
   }
 };
@@ -65,11 +89,12 @@ export const Register = async (request, reply) => {
   }
 
   try {
-    const [existingStudentId, existingUsername, existingEmail] = await Promise.all([
-      prisma.user.findUnique({ where: { studentId: formData.studentId } }),
-      prisma.user.findUnique({ where: { username: formData.username } }),
-      prisma.user.findUnique({ where: { email: formData.email } }),
-    ]);
+    const [existingStudentId, existingUsername, existingEmail] =
+      await Promise.all([
+        prisma.user.findUnique({ where: { studentId: formData.studentId } }),
+        prisma.user.findUnique({ where: { username: formData.username } }),
+        prisma.user.findUnique({ where: { email: formData.email } }),
+      ]);
 
     if (existingStudentId) {
       return reply.status(400).send({ message: "Student ID already exists." });
@@ -81,7 +106,7 @@ export const Register = async (request, reply) => {
       return reply.status(400).send({ message: "Email already exists." });
     }
 
-    const hashedPassword = await bcrypt.hash(formData.password , 12)
+    const hashedPassword = await bcrypt.hash(formData.password, 12);
     const user = await prisma.user.create({
       data: {
         studentId: formData.studentId,
@@ -96,23 +121,23 @@ export const Register = async (request, reply) => {
     const token = jwt.sign(
       {
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         username: user.username,
         email: user.email,
-        role: user.role,         
+        role: user.role,
       },
-      process.env.JWT_SECRET,     
-      { expiresIn: '1d' }        
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
     );
-    
-    reply.setCookie('schedule_pro', token, {
-      httpOnly: true,            
-      secure: process.env.NODE_ENV === 'production', 
-      sameSite: 'strict',         
-      path: '/',                  
-      maxAge: 24 * 60 * 60,   
+
+    reply.setCookie("schedule_pro", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 24 * 60 * 60,
     });
-
-
 
     return reply.status(201).send({
       message: "User registered successfully",
@@ -121,17 +146,18 @@ export const Register = async (request, reply) => {
         id: user.id,
         username: user.username,
         role: user.role,
-      }
+      },
     });
-
   } catch (error) {
-    console.error('Error during registration:', error);
-    return reply.status(500).send({ message: 'Internal Server Error', error: error.message });
+    console.error("Error during registration:", error);
+    return reply
+      .status(500)
+      .send({ message: "Internal Server Error", error: error.message });
   }
 };
 
 // Login
-export const  Login = async (request,reply) =>{
+export const Login = async (request, reply) => {
   const { username, password, checked } = request.body;
   if (!username || !password) {
     return reply.status(400).send({
@@ -139,7 +165,7 @@ export const  Login = async (request,reply) =>{
     });
   }
 
-  try{
+  try {
     const [StudentId, Username, Email] = await Promise.all([
       prisma.user.findUnique({ where: { studentId: username } }),
       prisma.user.findUnique({ where: { username: username } }),
@@ -157,41 +183,43 @@ export const  Login = async (request,reply) =>{
     const token = jwt.sign(
       {
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         username: user.username,
         email: user.email,
-        role: user.role, 
+        role: user.role,
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: checked ? "7d" : "1d", 
+        expiresIn: checked ? "7d" : "1d",
       }
     );
     reply.setCookie("schedule_pro", token, {
       path: "/",
       httpOnly: true,
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production", 
-      maxAge: checked ? 7 * 24 * 60 * 60 : 24 * 60 * 60, 
+      secure: process.env.NODE_ENV === "production",
+      maxAge: checked ? 7 * 24 * 60 * 60 : 24 * 60 * 60,
     });
 
     return reply.status(200).send({
       message: "Login successful",
-      token: token
-    })
-  }catch(error){
+      token: token,
+    });
+  } catch (error) {
     return reply.status(500).send({ message: "Internal server error" });
   }
-}
+};
 
 // Logout
 export const Logout = async (request, reply) => {
   try {
-    reply.clearCookie('schedule_pro', {
-      path: '/', 
+    reply.clearCookie("schedule_pro", {
+      path: "/",
     });
 
-    reply.send({ message: 'Logged out successfully' });
+    reply.send({ message: "Logged out successfully" });
   } catch (error) {
-    reply.code(500).send({ error: 'Logout failed' });
+    reply.code(500).send({ error: "Logout failed" });
   }
 };
