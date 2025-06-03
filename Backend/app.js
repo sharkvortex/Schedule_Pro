@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import rateLimit from '@fastify/rate-limit';
+import awsLambdaFastify from '@fastify/aws-lambda';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -51,4 +52,5 @@ await fastify.register(Routes, { prefix: "/api" });
 
 await fastify.ready();
 
-export default fastify;
+const proxy = awsLambdaFastify(fastify);
+export const handler = proxy;
