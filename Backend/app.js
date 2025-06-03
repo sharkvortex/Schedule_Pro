@@ -17,29 +17,37 @@ import Routes from "./Routes/Routes.js";
 
 const fastify = Fastify({ logger: false });
 
+
 await fastify.register(cookie);
+
 await fastify.register(fastifyMultipart, {
   attachFieldsToBody: false,
   limits: {
-    fileSize: 20 * 1024 * 1024,
+    fileSize: 20 * 1024 * 1024, 
     files: 10,
   }
 });
+
 await fastify.register(cors, {
   origin: process.env.CLIENT_URL,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"]
+  methods: ["GET", "POST", "PUT", "DELETE"],
 });
 
 await fastify.register(rateLimit, {
   max: 100,
   timeWindow: '1 minute',
-  hook: 'onRequest', 
+  hook: 'onRequest',
   addHeaders: {
     'x-ratelimit-limit': true,
     'x-ratelimit-remaining': true,
-    'x-ratelimit-reset': true
-  }
+    'x-ratelimit-reset': true,
+  },
+});
+
+
+fastify.get('/', async (request, reply) => {
+  return { message: "Hello Fastify!" };
 });
 
 
@@ -47,6 +55,9 @@ await fastify.register(AuthRoutes, { prefix: "/api" });
 await fastify.register(DashboardRoutes, { prefix: "/api" });
 await fastify.register(AdminRoutes, { prefix: "/api" });
 await fastify.register(Routes, { prefix: "/api" });
+
+
+await fastify.ready();
 
 
 const proxy = awsLambdaFastify(fastify);
