@@ -49,8 +49,5 @@ await fastify.register(AdminRoutes, { prefix: "/api" });
 await fastify.register(Routes, { prefix: "/api" });
 
 
-
-await fastify.ready();
-
 const proxy = awsLambdaFastify(fastify);
 export const handler = proxy;
