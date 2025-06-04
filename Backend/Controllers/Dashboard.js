@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 
+
 export const CountData = async (request, reply) => {
   try {
     const [totalUsers, totalSubjects , totalWorks] = await Promise.all([
