@@ -7,8 +7,8 @@ export const CountData = async (request, reply) => {
   try {
     const [totalUsers, totalSubjects , totalWorks] = await Promise.all([
       prisma.user.count(),
-      prisma.subjects.count(),
-      prisma.works.count(),
+      prisma.subject.count(),
+      prisma.work.count(),
     ]);
 
     return reply.status(200).send({

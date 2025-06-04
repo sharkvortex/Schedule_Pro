@@ -49,7 +49,7 @@ enum Study_day {
   SUN
 }
 
-model Subjects {
+model Subject {
   id           Int       @id @default(autoincrement())
   subject_id   String    @unique
   subject_name String
@@ -62,13 +62,13 @@ model Subjects {
   createAt     DateTime  @default(now())
   updateAt     DateTime  @default(now()) @updatedAt
 
-  works Works[]
+  works Work[]
 }
 
-model Works {
+model Work {
   id           Int       @id @default(autoincrement())
   subject_id   String
-  subject      Subjects  @relation(fields: [subject_id], references: [subject_id], onDelete: Cascade)
+  subject      Subject  @relation(fields: [subject_id], references: [subject_id], onDelete: Cascade)
   title        String
   description  String? @db.Text
   assignedDate DateTime
@@ -85,7 +85,7 @@ model Images {
   workId    Int
   url       String
   fileId    String
-  work      Works  @relation(fields: [workId], references: [id] , onDelete: Cascade)
+  work      Work  @relation(fields: [workId], references: [id] , onDelete: Cascade)
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 }
