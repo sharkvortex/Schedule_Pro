@@ -1,11 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import ImageKit from "imagekit";
+
+console.log("🧪 Railway Debug:");
+console.log("IMAGE_KIT_PUBLIC_KEY:", process.env.IMAGE_KIT_PUBLIC_KEY);
+console.log("IMAGE_KIT_PRIVATE_KEY:", process.env.IMAGE_KIT_PRIVATE_KEY);
+console.log("IMAGE_KIT_URL_ENDPOINT:", process.env.IMAGE_KIT_URL_ENDPOINT);
+
 const imagekit = new ImageKit({
   publicKey:  process.env.IMAGE_KIT_PUBLIC_KEY || 'public_pgZUE9kKgwJ6SoMX0HrBj45djnU=' ,
   privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
   urlEndpoint: process.env.IMAGE_KIT_URL_ENDPOINT,
 });
+
+
 
 // GET USERS
 export const getUsers = async (request, reply) => {
