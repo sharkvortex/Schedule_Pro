@@ -27,7 +27,7 @@ await fastify.register(fastifyMultipart, {
 });
 
 await fastify.register(cors, {
-  origin: process.env.CLIENT_URL,
+  origin: ["https://schedule-pro-plum.vercel.app"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 });
