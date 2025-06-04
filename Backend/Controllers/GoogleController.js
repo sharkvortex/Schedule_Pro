@@ -82,7 +82,8 @@ export const googleOAuthLogin = async (request, reply) => {
     reply.setCookie("schedule_pro", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
+      secure: true,
       path: "/",
       maxAge: 24 * 60 * 60,
     });

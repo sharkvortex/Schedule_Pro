@@ -134,7 +134,8 @@ export const Register = async (request, reply) => {
     reply.setCookie("schedule_pro", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
+      secure: true,
       path: "/",
       maxAge: 24 * 60 * 60,
     });
@@ -195,11 +196,12 @@ export const Login = async (request, reply) => {
       }
     );
     reply.setCookie("schedule_pro", token, {
-      path: "/",
       httpOnly: true,
-      sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
-      maxAge: checked ? 7 * 24 * 60 * 60 : 24 * 60 * 60,
+      sameSite: "none",
+      secure: true,
+      path: "/",
+      maxAge: 24 * 60 * 60,
     });
 
     return reply.status(200).send({
