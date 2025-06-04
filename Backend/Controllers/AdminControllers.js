@@ -6,6 +6,7 @@ const imagekit = new ImageKit({
   privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
   urlEndpoint: process.env.IMAGE_KIT_URL_ENDPOINT,
 });
+
 // GET USERS
 export const getUsers = async (request, reply) => {
   const { search = "", page = 1, limit = 10 } = request.query;
