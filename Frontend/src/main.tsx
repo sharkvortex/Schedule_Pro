@@ -9,7 +9,7 @@ import App from "./App";
 import Header from "./components/Header";
 createRoot(document.getElementById("root")!).render(
   <HelmetProvider>
-    <BrowserRouter>
+    <BrowserRouter basename="/">
     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
     <AuthProvider>
       <Header />
