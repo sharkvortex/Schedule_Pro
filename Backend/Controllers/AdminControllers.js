@@ -12,11 +12,13 @@ const imagekit = new ImageKit({
 
 // GET USERS
 export const getUsers = async (request, reply) => {
-  const { search = "", page = 1, limit = 10 } = request.query;
+  const { search = "", page = "1", limit = "10" } = request.query;
 
   try {
-    const skip = (page - 1) * limit;
-    const take = parseInt(limit, 10);
+    const pageNum = parseInt(page, 10) || 1;
+    const limitNum = parseInt(limit, 10) || 10;
+    const skip = (pageNum - 1) * limitNum;
+    const take = limitNum;
     const searchLower = search.toLowerCase();
 
     const isValidRole = ["admin", "member", "user"].includes(searchLower);
@@ -24,11 +26,11 @@ export const getUsers = async (request, reply) => {
     const whereCondition = search
       ? {
           OR: [
-            { username: { contains: search } },
-            { firstName: { contains: search } },
-            { lastName: { contains: search } },
-            { email: { contains: search } },
-            { studentId: { contains: search } },
+            { username: { contains: search, mode: "insensitive" } },
+            { firstName: { contains: search, mode: "insensitive" } },
+            { lastName: { contains: search, mode: "insensitive" } },
+            { email: { contains: search, mode: "insensitive" } },
+            { studentId: { contains: search, mode: "insensitive" } },
             ...(isValidRole ? [{ role: searchLower }] : []),
           ],
         }
@@ -57,6 +59,7 @@ export const getUsers = async (request, reply) => {
       user: 3,
     };
 
+ 
     const sortedUsers = allUsers.sort(
       (a, b) => rolePriority[a.role] - rolePriority[b.role]
     );
