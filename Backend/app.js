@@ -1,4 +1,3 @@
-// app.js
 import Fastify from "fastify";
 import rateLimit from "@fastify/rate-limit";
 import dotenv from "dotenv";
@@ -55,4 +54,13 @@ await fastify.register(Routes, { prefix: "/api" });
 
 await fastify.ready();
 
-export default fastify;
+
+const PORT = process.env.PORT || 8080;
+
+fastify.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
+  if (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+  console.log(`🚀 Server is running at ${address}`);
+});
