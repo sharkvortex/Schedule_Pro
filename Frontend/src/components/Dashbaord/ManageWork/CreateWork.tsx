@@ -1,13 +1,14 @@
-import { X, Save, Link, ImagePlus } from "lucide-react";
+import { X, Save,  ImagePlus, } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useSubject } from "../../../hooks/admin/useSubject";
 import { useCreateWork } from "../../../hooks/admin/Work/useCreateWork";
 import Loading from "../../UI/Loading";
+import { Link } from "react-router-dom";
 export interface CreateWorkProps {
   setIsCreate: React.Dispatch<React.SetStateAction<boolean>>;
   isCreate: boolean;
-  refetch: ()=> void;
+  refetch: () => void;
 }
 
 export interface CreateWorkDataType {
@@ -19,9 +20,8 @@ export interface CreateWorkDataType {
   link: string;
   image: File[] | null;
   linkCode: string;
-  
 }
-function CreateWork({ setIsCreate, isCreate , refetch }: CreateWorkProps) {
+function CreateWork({ setIsCreate, isCreate, refetch }: CreateWorkProps) {
   const { subjects } = useSubject();
   const { createWork, creating } = useCreateWork();
   const defaultFormData: CreateWorkDataType = {
@@ -43,7 +43,6 @@ function CreateWork({ setIsCreate, isCreate , refetch }: CreateWorkProps) {
     const { name, value, files, type } = e.target as HTMLInputElement;
 
     if (type === "file" && files) {
-
       setFormData((prev) => ({
         ...prev,
         [name]: Array.from(files),
@@ -57,42 +56,42 @@ function CreateWork({ setIsCreate, isCreate , refetch }: CreateWorkProps) {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (
-    !formData.subject_id ||
-    !formData.title ||
-    !formData.assignedDate ||
-    !formData.dueDate
-  ) {
-    toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
-    return;
-  }
-
-  if (formData.image) {
-    if (formData.image.length > 10) {
-      toast.error("เลือกได้ไม่เกิน 10 รูป");
+    if (
+      !formData.subject_id ||
+      !formData.title ||
+      !formData.assignedDate ||
+      !formData.dueDate
+    ) {
+      toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
       return;
     }
-    for (const file of formData.image) {
-      if (file.size > 20 * 1024 * 1024) {
-        toast.error(`ไฟล์ ${file.name} ขนาดเกิน 20MB`);
+
+    if (formData.image) {
+      if (formData.image.length > 10) {
+        toast.error("เลือกได้ไม่เกิน 10 รูป");
         return;
       }
+      for (const file of formData.image) {
+        if (file.size > 20 * 1024 * 1024) {
+          toast.error(`ไฟล์ ${file.name} ขนาดเกิน 20MB`);
+          return;
+        }
+      }
     }
-  }
 
-  try {
-    const response = await createWork(formData);
-    if (response.status === 200) {
-      setFormData(defaultFormData);
-      setIsCreate(false);
-      refetch();
+    try {
+      const response = await createWork(formData);
+      if (response.status === 200) {
+        setFormData(defaultFormData);
+        setIsCreate(false);
+        refetch();
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
   return (
     <>
       {isCreate && (
@@ -112,9 +111,7 @@ function CreateWork({ setIsCreate, isCreate , refetch }: CreateWorkProps) {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium mb-1">
-                  วิชา
-                </label>
+                <label className="block text-sm font-medium mb-1">วิชา</label>
                 <select
                   className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white"
                   name="subject_id"
@@ -213,7 +210,7 @@ function CreateWork({ setIsCreate, isCreate , refetch }: CreateWorkProps) {
                     onChange={handleChange}
                     value={formData.link}
                   />
-                  <Link className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
+                  
                 </div>
               </div>
 
@@ -236,17 +233,19 @@ function CreateWork({ setIsCreate, isCreate , refetch }: CreateWorkProps) {
 
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  ลิ้งก์โค้ด (ถ้ามี)
+                  ลิ้งก์โค้ด (ถ้ามี)  <Link className="underline text-blue-500" target="_blank"  to={"https://gist.github.com/"}>สร้างโค้ด</Link>
+                  
                 </label>
+                
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="วางลิ้งก์โค้ด เช่น GitHub, CodePen"
+                    placeholder="วางลิ้งก์โค้ด เช่น GitHub"
                     className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white"
                     name="linkCode"
                     onChange={handleChange}
                   />
-                  <Link className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
+                  
                 </div>
               </div>
 
