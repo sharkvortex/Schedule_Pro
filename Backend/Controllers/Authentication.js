@@ -136,7 +136,7 @@ export const Register = async (request, reply) => {
 
       reply.setCookie("schedule_pro", token, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         sameSite:  "none" ,
         path: "/",
         maxAge: 24 * 60 * 60,
