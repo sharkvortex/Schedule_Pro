@@ -12,7 +12,7 @@ export const googleOAuthLogin = async (request, reply) => {
   }
 
   try {
-    // ดึงข้อมูลผู้ใช้จาก Google
+    
     const googleUser = await axios.get(
       `https://www.googleapis.com/oauth2/v3/userinfo`,
       {
@@ -81,7 +81,7 @@ export const googleOAuthLogin = async (request, reply) => {
     
     reply.setCookie("schedule_pro", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "none",
       secure: true,
       path: "/",

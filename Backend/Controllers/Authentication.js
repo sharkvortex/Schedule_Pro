@@ -54,8 +54,8 @@ export const Authentication = async (request, reply) => {
 
       reply.setCookie("schedule_pro", newToken, {
         httpOnly: true,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
+        sameSite: "none",
         path: "/",
         maxAge: 60 * 60 * 24, 
       });
@@ -133,7 +133,7 @@ export const Register = async (request, reply) => {
 
     reply.setCookie("schedule_pro", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "none",
       secure: true,
       path: "/",
@@ -197,7 +197,7 @@ export const Login = async (request, reply) => {
     );
     reply.setCookie("schedule_pro", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "none",
       secure: true,
       path: "/",
@@ -218,6 +218,9 @@ export const Logout = async (request, reply) => {
   try {
     reply.clearCookie("schedule_pro", {
       path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
     });
 
     reply.send({ message: "Logged out successfully" });
