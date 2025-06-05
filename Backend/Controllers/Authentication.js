@@ -52,12 +52,14 @@ export const Authentication = async (request, reply) => {
         { expiresIn: "1d" }
       );
 
+      const isProduction = process.env.NODE_ENV === "production";
+
       reply.setCookie("schedule_pro", newToken, {
         httpOnly: true,
-        secure: true,
-        sameSite: "none",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         path: "/",
-        maxAge: 60 * 60 * 24, 
+        maxAge: 24 * 60 * 60,
       });
 
       request.user = jwt.verify(newToken, process.env.JWT_SECRET);
@@ -131,14 +133,15 @@ export const Register = async (request, reply) => {
       { expiresIn: "1d" }
     );
 
-    reply.setCookie("schedule_pro", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      secure: true,
-      path: "/",
-      maxAge: 24 * 60 * 60,
-    });
+    const isProduction = process.env.NODE_ENV === "production";
+
+      reply.setCookie("schedule_pro", token, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+        path: "/",
+        maxAge: 24 * 60 * 60,
+      });
 
     return reply.status(201).send({
       message: "User registered successfully",
@@ -215,13 +218,17 @@ export const Login = async (request, reply) => {
 
 // Logout
 export const Logout = async (request, reply) => {
+  const isProduction = process.env.NODE_ENV === "production";
   try {
-    reply.clearCookie("schedule_pro", {
-      path: "/",
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    });
+
+
+      reply.clearCookie("schedule_pro", {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+        path: "/",
+        maxAge: 24 * 60 * 60,
+      });
 
     reply.send({ message: "Logged out successfully" });
   } catch (error) {

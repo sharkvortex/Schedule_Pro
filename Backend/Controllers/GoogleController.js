@@ -12,7 +12,6 @@ export const googleOAuthLogin = async (request, reply) => {
   }
 
   try {
-    
     const googleUser = await axios.get(
       `https://www.googleapis.com/oauth2/v3/userinfo`,
       {
@@ -23,10 +22,11 @@ export const googleOAuthLogin = async (request, reply) => {
     const { sub, email, given_name, family_name } = googleUser.data;
 
     if (!sub || !email) {
-      return reply.status(400).send({ message: "Missing required fields from Google" });
+      return reply
+        .status(400)
+        .send({ message: "Missing required fields from Google" });
     }
 
-   
     let studentIdFromEmail = null;
     if (email.endsWith("@rmu.ac.th")) {
       studentIdFromEmail = email.split("@")[0];
@@ -36,19 +36,16 @@ export const googleOAuthLogin = async (request, reply) => {
 
     let user = null;
 
-   
     user = await prisma.user.findUnique({
       where: { email },
     });
 
-    
     if (!user && studentIdFromEmail) {
       user = await prisma.user.findUnique({
         where: { studentId: studentIdFromEmail },
       });
     }
 
-  
     if (!user) {
       user = await prisma.user.create({
         data: {
@@ -58,12 +55,11 @@ export const googleOAuthLogin = async (request, reply) => {
           username: studentId,
           email,
           password: await bcrypt.hash(sub + email, 10),
-          authGoogle: true
+          authGoogle: true,
         },
       });
     }
 
-   
     const token = jwt.sign(
       {
         id: user.id,
@@ -72,23 +68,21 @@ export const googleOAuthLogin = async (request, reply) => {
         username: user.username,
         email: user.email,
         role: user.role,
-        
       },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
 
-    
+    const isProduction = process.env.NODE_ENV === "production";
+
     reply.setCookie("schedule_pro", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      secure: true,
+      secure: isProduction, 
+      sameSite: isProduction ? "none" : "lax", 
       path: "/",
       maxAge: 24 * 60 * 60,
     });
 
- 
     return reply.send({
       message: "Authenticated via Google",
       token,
@@ -98,10 +92,10 @@ export const googleOAuthLogin = async (request, reply) => {
         role: user.role,
       },
     });
-
   } catch (err) {
     console.error("OAuth Login Error:", err);
-    return reply.status(500).send({ message: "Internal Server Error", error: err.message });
+    return reply
+      .status(500)
+      .send({ message: "Internal Server Error", error: err.message });
   }
 };
-
