@@ -4,12 +4,14 @@ import ListWorks from "./ListWorks";
 import { useEffect, useState } from "react";
 import { useSubject } from "../../../hooks/admin/useSubject";
 import { useGetWork } from "../../../hooks/admin/Work/useGetWork";
+import Loading from "../../UI/Loading";
 function ManageWorks() {
   const [isCreate, setIsCreate] = useState<boolean>(false);
   const [isEditWork, setIsEditWork] = useState<boolean>(false);
   const { subjects } = useSubject();
   const [selectedSubject, setSelectedSubject] = useState<string>("");
-  const {getWork , workData} = useGetWork()
+  const { getWork, workData, workLoading } = useGetWork();
+
   useEffect(() => {
     if (isCreate) {
       setIsEditWork(false);
@@ -23,8 +25,8 @@ function ManageWorks() {
   }, [isEditWork]);
 
   useEffect(() => {
-    getWork(selectedSubject)
-  },[selectedSubject])
+    getWork(selectedSubject);
+  }, [selectedSubject]);
 
   return (
     <>
@@ -51,6 +53,7 @@ function ManageWorks() {
                   name="studentId"
                   className="w-max rounded-lg border border-gray-400 cursor-pointer p-2 px-4 normal-bg outline-0"
                   onChange={(e) => setSelectedSubject(e.target.value)}
+                  value={selectedSubject}
                 >
                   <option className="p-2" value="">
                     ทั้งหมด
@@ -66,17 +69,34 @@ function ManageWorks() {
             </div>
           )}
 
-          <CreateWork isCreate={isCreate} setIsCreate={setIsCreate} 
-          refetch={()=> {setSelectedSubject(''),getWork()}} />
-          {!isCreate && (
-            <ListWorks
-              isEditWork={isEditWork}
-              setIsEditWork={setIsEditWork}
-              isCreate={isCreate}
-              setIsCreate={setIsCreate}
-              workData={workData}
-              refetch={()=> {setSelectedSubject(''),getWork()}}
-            />
+          <CreateWork
+            isCreate={isCreate}
+            setIsCreate={setIsCreate}
+            refetch={() => {
+              setSelectedSubject("");
+              getWork("");
+            }}
+          />
+
+          {/* แสดง Loading ถ้า workLoading เป็น true */}
+          {workLoading ? (
+            <div className="flex justify-center items-center min-h-[200px]">
+              <Loading />
+            </div>
+          ) : (
+            !isCreate && (
+              <ListWorks
+                isEditWork={isEditWork}
+                setIsEditWork={setIsEditWork}
+                isCreate={isCreate}
+                setIsCreate={setIsCreate}
+                workData={workData}
+                refetch={() => {
+                  setSelectedSubject("");
+                  getWork("");
+                }}
+              />
+            )
           )}
         </div>
       </div>

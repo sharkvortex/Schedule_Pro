@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import TableData from "./TableData";
+import { useSubject } from "../hooks/admin/useSubject";
 function TableSchedule() {
+  const {subjects, loading} = useSubject();
   const timeSlots: string[] = [
     "DAY",
     "8:00 AM - 9:00 AM",
@@ -70,12 +72,12 @@ function TableSchedule() {
               <td >Monday</td>
               {/* จันทร์เช้า */}
               <td colSpan={4}>
-                <TableData study_day="MON" period="MORNING"/>
+                <TableData study_day="MON" period="MORNING" subjects={subjects} subjectLoading={loading} />
               </td>
               <td > Lunch break</td>
               {/* จันทร์บ่าย */}
               <td colSpan={3}>
-                <TableData study_day="MON" period="AFTERNOON"/>
+                <TableData study_day="MON" period="AFTERNOON" subjects={subjects} subjectLoading={loading}/>
               </td>
             </tr>
 
@@ -84,12 +86,12 @@ function TableSchedule() {
               <td>Tuesday</td>
               {/* อังคารเช้า */}
               <td colSpan={4}>
-                <TableData study_day="TUE" period="MORNING"/>
+                <TableData study_day="TUE" period="MORNING" subjects={subjects} subjectLoading={loading}/>
               </td>
               <td >Lunch break</td>
               {/* อังคารบ่าย */}
               <td colSpan={3}>
-                <TableData study_day="TUE" period="AFTERNOON"/>
+                <TableData study_day="TUE" period="AFTERNOON" subjects={subjects} subjectLoading={loading}/>
               </td>
             </tr>
             {/* WEDNESDAY */}
@@ -97,12 +99,12 @@ function TableSchedule() {
               <td>Wednesday</td>
               {/* พุธเช้า */}
               <td colSpan={4}>
-                <TableData study_day="WED" period="MORNING"/>
+                <TableData study_day="WED" period="MORNING" subjects={subjects} subjectLoading={loading}/>
               </td>
               <td >Lunch break</td>
               {/* พุธบ่าย */}
               <td colSpan={3}>
-                <TableData study_day="WED" period="AFTERNOON"/>
+                <TableData study_day="WED" period="AFTERNOON" subjects={subjects} subjectLoading={loading}/>
               </td>
             </tr>
             {/* THURSDAY */}
@@ -110,12 +112,12 @@ function TableSchedule() {
               <td>Thursday</td>
               {/* พฤหัสเช้า */}
               <td colSpan={4}>
-                <TableData study_day="THU" period="MORNING"/>
+                <TableData study_day="THU" period="MORNING" subjects={subjects} subjectLoading={loading}/>
               </td>
               <td >Lunch break</td>
               {/* พฤหัสบ่าย */}
               <td colSpan={3}>
-                <TableData study_day="THU" period="AFTERNOON"/>
+                <TableData study_day="THU" period="AFTERNOON" subjects={subjects} subjectLoading={loading}/>
               </td>
             </tr>
             {/* FRIDAY */}
@@ -123,12 +125,12 @@ function TableSchedule() {
               <td>Friday</td>
               {/* ศุกร์เช้า */}
               <td colSpan={4}>
-                <TableData study_day="FRI" period="MORNING"/>
+                <TableData study_day="FRI" period="MORNING" subjects={subjects} subjectLoading={loading}/>
               </td>
               <td >Lunch break</td>
               {/* ศุกร์บ่าย */}
               <td colSpan={3}>
-                <TableData study_day="FRI" period="AFTERNOON"/>
+                <TableData study_day="FRI" period="AFTERNOON" subjects={subjects} subjectLoading={loading}/>
               </td>
             </tr>
           </tbody>

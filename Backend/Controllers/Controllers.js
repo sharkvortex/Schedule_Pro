@@ -6,7 +6,7 @@ import nodemailer from "nodemailer";
 // GET ALL SUBJECTS
 export const getSubjects = async (request, reply) => {
   try {
-    const subjects = await prisma.subjects.findMany();
+    const subjects = await prisma.subject.findMany();
 
     const dayOrder = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
     const periodOrder = ["MORNING", "AFTERNOON", "EVENING"];
@@ -43,7 +43,7 @@ export const getSubjects = async (request, reply) => {
 export const getSubjectId = async (request, reply) => {
   const { subjectId } = request.params;
   try {
-    const subject = await prisma.subjects.findUnique({
+    const subject = await prisma.subject.findUnique({
       where: {
         subject_id: subjectId,
       },
@@ -72,7 +72,7 @@ export const getWorkSubjectId = async (request, reply) => {
   const { subjectId } = request.params;
   const { orderBy } = request.query;
   try {
-    const works = await prisma.works.findMany({
+    const works = await prisma.work.findMany({
       where: {
         subject_id: subjectId,
       },
@@ -99,7 +99,7 @@ export const getWorkId = async (request, reply) => {
   const { subjectId, id } = request.params;
 
   try {
-    const work = await prisma.works.findFirst({
+    const work = await prisma.work.findFirst({
       where: {
         id: parseInt(id),
         subject_id: subjectId,

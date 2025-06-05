@@ -224,7 +224,7 @@ export const createSubject = async (request, reply) => {
       return reply.status(400).send({ message: "ค่าช่วงเวลาไม่ถูกต้อง" });
     }
 
-    const existingSubject = await prisma.subjects.findFirst({
+    const existingSubject = await prisma.subject.findFirst({
       where: {
         study_day,
         period,
@@ -237,7 +237,7 @@ export const createSubject = async (request, reply) => {
       });
     }
 
-    const newSubject = await prisma.subjects.create({
+    const newSubject = await prisma.subject.create({
       data: {
         subject_id,
         subject_name,
@@ -279,7 +279,7 @@ export const editSubject = async (request, reply) => {
     room,
   } = request.body;
   try {
-    const existing = await prisma.subjects.findUnique({
+    const existing = await prisma.subject.findUnique({
       where: { id },
     });
 
@@ -287,7 +287,7 @@ export const editSubject = async (request, reply) => {
       return reply.code(404).send({ message: "ไม่พบ id ในระบบ" });
     }
 
-    const duplicateID = await prisma.subjects.findFirst({
+    const duplicateID = await prisma.subject.findFirst({
       where: {
         subject_id,
         NOT: { id: existing.id },
@@ -298,7 +298,7 @@ export const editSubject = async (request, reply) => {
       return reply.code(400).send({ message: "รหัสวิชานี้มีในระบบแล้ว" });
     }
 
-    const overlappingSchedule = await prisma.subjects.findFirst({
+    const overlappingSchedule = await prisma.subject.findFirst({
       where: {
         study_day,
         period,
@@ -312,7 +312,7 @@ export const editSubject = async (request, reply) => {
       });
     }
 
-    const updatedSubject = await prisma.subjects.update({
+    const updatedSubject = await prisma.subject.update({
       where: { id },
       data: {
         subject_id,
@@ -344,7 +344,7 @@ export const editSubject = async (request, reply) => {
 export const deleteSubject = async (request, reply) => {
   const { id } = request.params;
   try {
-    const existingSubject = await prisma.subjects.findUnique({
+    const existingSubject = await prisma.subject.findUnique({
       where: { id: Number(id) },
     });
 
@@ -354,7 +354,7 @@ export const deleteSubject = async (request, reply) => {
       });
     }
 
-    await prisma.subjects.delete({
+    await prisma.subject.delete({
       where: { id: Number(id) },
     });
 
@@ -418,7 +418,7 @@ export const createWork = async (request, reply) => {
       }
     }
 
-    const createdWork = await prisma.works.create({
+    const createdWork = await prisma.work.create({
       data: {
         subject_id: workData.subject_id,
         title: workData.title,
@@ -461,7 +461,7 @@ export const getWorks = async (request, reply) => {
   const { subject_id } = request.query;
 
   try {
-    const works = await prisma.works.findMany({
+    const works = await prisma.work.findMany({
       where: subject_id
         ? { subject_id } 
         : undefined,     
@@ -509,7 +509,7 @@ export const editWork = async (request, reply) => {
       return reply.code(400).send({ error: "Invalid work ID" });
     }
 
-    const existingWork = await prisma.works.findUnique({
+    const existingWork = await prisma.work.findUnique({
       where: { id: workId },
     });
 
@@ -538,7 +538,7 @@ export const editWork = async (request, reply) => {
     }
 
     if (Object.keys(updateData).length > 0) {
-      await prisma.works.update({
+      await prisma.work.update({
         where: { id: workId },
         data: updateData,
       });
@@ -590,7 +590,7 @@ export const deleteWork = async (request, reply) => {
       );
     }
 
-    await prisma.works.delete({
+    await prisma.work.delete({
       where: { id: Number(id) },
     });
 

@@ -12,6 +12,7 @@ import {
 import { useProfile } from "../hooks/useProfile";
 import EditProfile from "./EditProfile";
 import { useAuth } from "../context/AuthContext";
+import Loading from "./UI/Loading";
 interface ProfileItemProps {
   icon: React.ReactNode;
   label: string;
@@ -21,17 +22,32 @@ interface ProfileItemProps {
 function Profile() {
   const auth = useAuth();
   const [editing, setEditing] = useState<boolean>(false);
-  const { profile , refetch} = useProfile();
-  const user = profile;
- 
-  if (!user) {
-    return <div className="text-center p-4">กำลังโหลดข้อมูลโปรไฟล์...</div>;
-  }
+  const { profile, refetch, loading } = useProfile();
 
+  if (loading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
+  if (!profile) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <p>ไม่พบข้อมูลผู้ใช้</p>
+    </div>
+  );
+}
   return (
     <div className="w-full max-w-2xl mx-auto p-4">
       {editing ? (
-        <EditProfile user={user} onCancel={() => setEditing(false)} refetch={()=> {refetch() ,setEditing(false) ,  auth?.getAuthentication?.();}} />
+        <EditProfile
+          user={profile}
+          onCancel={() => setEditing(false)}
+          refetch={() => {
+            refetch(); setEditing(false); auth?.getAuthentication?.();
+          }}
+        />
       ) : (
         <>
           <div className="text-center mb-10">
@@ -59,34 +75,34 @@ function Profile() {
               <ProfileItem
                 icon={<User className="w-5 h-5" />}
                 label="ชื่อ"
-                value={user.firstName}
+                value={profile.firstName}
               />
               <ProfileItem
                 icon={<User className="w-5 h-5" />}
                 label="นามสกุล"
-                value={user.lastName}
+                value={profile.lastName}
               />
             </div>
 
             <ProfileItem
               icon={<GraduationCap className="w-5 h-5" />}
               label="รหัสนักศึกษา"
-              value={user.studentId}
+              value={profile.studentId}
             />
             <ProfileItem
               icon={<Hash className="w-5 h-5" />}
               label="Username"
-              value={user.username}
+              value={profile.username}
             />
             <ProfileItem
               icon={<Mail className="w-5 h-5" />}
               label="Email"
-              value={user.email}
+              value={profile.email}
             />
             <ProfileItem
               icon={<Shield className="w-5 h-5" />}
               label="สิทธิ์การเข้าถึง"
-              value={getRoleDescription(user.role)}
+              value={getRoleDescription(profile.role)}
             />
           </div>
         </>

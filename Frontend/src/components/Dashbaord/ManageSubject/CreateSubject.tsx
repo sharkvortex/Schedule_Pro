@@ -10,6 +10,7 @@ import {
 import { useCreateSubject } from "../../../hooks/admin/Subject/useCreateSubject";
 import toast from "react-hot-toast";
 import React from "react";
+import Loading from "../../UI/Loading";
 interface CreateSubjectFormProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: () => void;
@@ -27,7 +28,7 @@ export interface SubjectDataType {
 }
 
 function CreateSubjectForm({ setIsOpen , refetch }: CreateSubjectFormProps) {
-  const { createSubject } = useCreateSubject();
+  const { createSubject , isLoading } = useCreateSubject();
   const [formData, setFormData] = useState<SubjectDataType>({
     subject_id: "",
     subject_name: "",
@@ -200,11 +201,15 @@ function CreateSubjectForm({ setIsOpen , refetch }: CreateSubjectFormProps) {
 
           <div className="md:col-span-2 flex justify-end gap-4 pt-6">
             <button
+            disabled={isLoading}
               type="submit"
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 py-2 rounded-full shadow-lg transition-all hover:scale-105 hover:cursor-pointer"
+              className={`flex items-center gap-2  text-white px-6 py-2 rounded-full shadow-lg transition-all hover:scale-105 
+                ${isLoading ? "hover:cursor-not-allowed bg-gray-300" : "hover:cursor-pointer bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600"}
+                `}
             >
               <FaSave />
-              สร้างวิชา
+              {isLoading ? <div className="px-2 flex items-center justify-center"><Loading size={12}/></div> : "สร้างวิชา"}
+              
             </button>
             <button
               type="button"
