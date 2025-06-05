@@ -52,12 +52,12 @@ export const Authentication = async (request, reply) => {
         { expiresIn: "1d" }
       );
 
-      const isProduction = process.env.NODE_ENV === "production";
+     
 
       reply.setCookie("schedule_pro", newToken, {
         httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? "none" : "lax",
+        secure: true,
+        sameSite: "none" ,
         path: "/",
         maxAge: 24 * 60 * 60,
       });
@@ -133,12 +133,11 @@ export const Register = async (request, reply) => {
       { expiresIn: "1d" }
     );
 
-    const isProduction = process.env.NODE_ENV === "production";
 
       reply.setCookie("schedule_pro", token, {
         httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? "none" : "lax",
+        secure: true,
+        sameSite:  "none" ,
         path: "/",
         maxAge: 24 * 60 * 60,
       });
@@ -202,7 +201,6 @@ export const Login = async (request, reply) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      secure: true,
       path: "/",
       maxAge: 24 * 60 * 60,
     });
@@ -218,14 +216,12 @@ export const Login = async (request, reply) => {
 
 // Logout
 export const Logout = async (request, reply) => {
-  const isProduction = process.env.NODE_ENV === "production";
   try {
-
 
       reply.clearCookie("schedule_pro", {
         httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? "none" : "lax",
+        secure: true,
+        sameSite:  "none",
         path: "/",
         maxAge: 24 * 60 * 60,
       });

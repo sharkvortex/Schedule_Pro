@@ -73,12 +73,12 @@ export const googleOAuthLogin = async (request, reply) => {
       { expiresIn: "1d" }
     );
 
-    const isProduction = process.env.NODE_ENV === "production";
+   
 
     reply.setCookie("schedule_pro", token, {
       httpOnly: true,
-      secure: isProduction, 
-      sameSite: isProduction ? "none" : "lax", 
+      secure: true, 
+      sameSite: "none", 
       path: "/",
       maxAge: 24 * 60 * 60,
     });
