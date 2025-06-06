@@ -27,20 +27,9 @@ async function buildServer() {
     },
   });
 
-  await fastify.register(cors, {
-    origin: (origin, cb) => {
-      const allowedOrigins = [
-        "https://schedule-pro-plum.vercel.app",
-        "http://localhost:5173",
-      ];
-      if (!origin || allowedOrigins.includes(origin)) {
-        cb(null, true);
-        return;
-      }
-      cb(new Error("Not allowed by CORS"));
-    },
+  await fastify.register(require("@fastify/cors"), {
+    origin: ["http://localhost:5173", "https://schedule-pro-plum.vercel.app"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
   });
 
   await fastify.register(rateLimit, {

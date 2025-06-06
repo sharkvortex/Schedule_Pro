@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const getAuthentication = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/authentication`,
+        `/api/authentication`,
         {
           withCredentials: true,
         }
