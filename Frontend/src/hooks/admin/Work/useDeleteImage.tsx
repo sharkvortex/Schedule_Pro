@@ -9,7 +9,7 @@ export const useDeleteImage = () => {
     setImagedeleTing(true);
     try {
       const response = await toast.promise(
-        axios.delete(`${import.meta.env.VITE_API_URL}/api/delete/image/${fileId}`, {
+        axios.delete(`/api/delete/image/${fileId}`, {
           withCredentials: true,
         }),
         {

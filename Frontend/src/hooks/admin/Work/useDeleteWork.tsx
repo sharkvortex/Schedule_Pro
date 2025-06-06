@@ -5,7 +5,7 @@ export const useDeleteWork = () => {
   const [workDeleting , setWorkDeleting] = useState<boolean>(false)
   const deleteWork = async (id?: number) => {
     const promise = axios.delete(
-      `${import.meta.env.VITE_API_URL}/api/delete/work/${id}`,
+      `/api/delete/work/${id}`,
       {
         withCredentials: true,
       }

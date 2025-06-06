@@ -24,7 +24,7 @@ export const useEditWork = () => {
       });
 
       const response = axios.put(
-        `${import.meta.env.VITE_API_URL}/api/edit/work`,
+        `/api/edit/work`,
         data,
         {
           headers: {

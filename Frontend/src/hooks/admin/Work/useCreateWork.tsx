@@ -25,7 +25,7 @@ export const useCreateWork = () => {
     setCreating(true);
 
     const uploadPromise = axios
-      .post(`${import.meta.env.VITE_API_URL}/api/create/work`, data, {
+      .post(`/api/create/work`, data, {
         withCredentials: true,
       })
       .then((res) => {

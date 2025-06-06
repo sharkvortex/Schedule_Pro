@@ -33,7 +33,7 @@ export const useGetWork = () => {
     try {
       setWorkLoading(true);
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/works`,
+        `/api/works`,
         {
           params: {
             subject_id: select,
