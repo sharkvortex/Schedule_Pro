@@ -23,7 +23,7 @@ export const useSubject = () => {
     setError(null);
 
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/subjects`, {
+      const { data } = await axios.get(`/api/subjects`, {
         headers: {
           "Content-Type": "application/json",
         },

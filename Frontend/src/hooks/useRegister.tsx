@@ -21,7 +21,7 @@ export const useRegister = () => {
     try {
       setLoading(true);
       const response = await toast.promise(
-        axios.post(`${import.meta.env.VITE_API_URL}/api/register`, formData, {
+        axios.post(`/api/register`, formData, {
           headers: {
             "Content-Type": "application/json",
           },

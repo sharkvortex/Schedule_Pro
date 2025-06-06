@@ -9,7 +9,7 @@ export const useCreateSubject = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/create/subject`,
+        `/api/create/subject`,
         formData,
         {
           headers: {

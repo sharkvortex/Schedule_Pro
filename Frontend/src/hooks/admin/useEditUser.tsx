@@ -15,7 +15,7 @@ export const EditUser = () => {
     return toast.promise(
       axios
         .put(
-          `${import.meta.env.VITE_API_URL}/api/edit/user/${FormData.id}`,
+          `/api/edit/user/${FormData.id}`,
           FormData,
           {
             headers: { "Content-Type": "application/json" },

@@ -5,7 +5,7 @@ export const useResetPassword = () => {
     const resetPassword = async (email: string) => {
         setSending(true);
         try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/reset-password`, { email });
+        const response = await axios.post(`/api/auth/reset-password`, { email });
         return response.data;
         } catch (error) {
         if (axios.isAxiosError(error)) {

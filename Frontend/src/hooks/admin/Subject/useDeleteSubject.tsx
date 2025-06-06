@@ -6,7 +6,7 @@ export const useDeleteSubject = () => {
   const deleteSubject = async(id: number) => {
     setDeleting(true);
     try {
-      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/delete/subject/${id}` ,
+      const response = await axios.delete(`/api/delete/subject/${id}` ,
         {
             headers:{
                 "Content-Type": "application/json",

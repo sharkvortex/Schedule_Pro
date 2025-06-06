@@ -34,7 +34,7 @@ export const useGetWorkId = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/work/${subjectId}/${id}`,
+        `/api/work/${subjectId}/${id}`,
         {
           withCredentials: true,
         }

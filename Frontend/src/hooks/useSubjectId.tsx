@@ -9,7 +9,7 @@ export const useSubjectId = () => {
         }
         try{
             const response = await axios.get(
-                `${import.meta.env.VITE_API_URL}/api/subject/${subjectId}`,
+                `/api/subject/${subjectId}`,
                 {
                     headers: {
                         "Content-Type": "application/json",

@@ -5,7 +5,7 @@ export const useDeleteUser = () => {
     const DeleteuserID = async (id: number) => {
         return toast.promise(
             axios.delete(
-              `${import.meta.env.VITE_API_URL}/api/delete/user/${id}`,
+              `/api/delete/user/${id}`,
               {
                 headers: {
                   "Content-Type": "application/json",

@@ -8,7 +8,7 @@ export const useEditSubject = () => {
         if(!FormData) return null
         try{
             setIsLoading(true)
-            const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/edit/subject`,FormData ,
+            const response = await axios.put(`/api/edit/subject`,FormData ,
                 {
                     headers:{
                         "Content-Type": "application/json",

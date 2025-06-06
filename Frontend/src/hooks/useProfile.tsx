@@ -19,7 +19,7 @@ export const useProfile = () => {
   const fetchProfile = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/user/profile`,
+        `/api/user/profile`,
         { withCredentials: true }
       );
       setProfile(response.data);

@@ -14,7 +14,7 @@ const useDashboard = () => {
     const getData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/dashboard`,
+          `/api/dashboard`,
           {
             headers: {
               "Content-Type": "application/json",

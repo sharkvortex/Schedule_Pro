@@ -20,7 +20,7 @@ export const useWorkSubject = () => {
         setSubjectLoading(true);
         try {
             const response = await axios.get(
-                `${import.meta.env.VITE_API_URL}/api/work/subject/${subjectId}?orderBy=${orderBy}`,
+                `/api/work/subject/${subjectId}?orderBy=${orderBy}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
