@@ -27,7 +27,7 @@ async function buildServer() {
     },
   });
 
-  await fastify.register(require("@fastify/cors"), {
+  await fastify.register(cors, {
     origin: ["http://localhost:5173", "https://schedule-pro-plum.vercel.app"],
     credentials: true,
   });
