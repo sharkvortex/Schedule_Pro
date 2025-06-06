@@ -3,13 +3,16 @@ import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import Loading from "../../components/UI/Loading";
 
 export default function GoogleLoginButton() {
   const navigate = useNavigate();
-
+  const [googleLoading, setGoogleLoading] = useState<boolean>(false);
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
+        setGoogleLoading(true);
         const res = await axios.post(
           `/api/auth/google`,
           {
@@ -29,6 +32,8 @@ export default function GoogleLoginButton() {
 
         console.error("Google login failed", err);
         toast.error(errorMessage);
+      } finally {
+        setGoogleLoading(false);
       }
     },
     onError: () => {
@@ -36,6 +41,13 @@ export default function GoogleLoginButton() {
       toast.error("เกิดข้อผิดพลาดขณะเข้าสู่ระบบด้วย Google");
     },
   });
+  if (googleLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white/80 z-50">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <button
