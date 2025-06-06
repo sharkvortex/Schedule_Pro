@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 // GET ALL SUBJECTS
@@ -232,7 +232,7 @@ export const sendMailResetPassword = async (request, reply) => {
 
     const user = await prisma.user.findUnique({
       where: { email },
-      select: { id: true, firstName: true, lastName: true , authGoogle: true },
+      select: { id: true, firstName: true, lastName: true, authGoogle: true },
     });
 
     if (!user) {
@@ -242,7 +242,7 @@ export const sendMailResetPassword = async (request, reply) => {
           "หากอีเมลนี้อยู่ในระบบของ Sked Pro คุณจะได้รับลิงก์สำหรับรีเซ็ตรหัสผ่านทางอีเมลภายในไม่กี่นาที",
       });
     }
-   
+
     if (user.authGoogle) {
       return reply.code(400).send({
         success: false,
@@ -314,22 +314,17 @@ export const sendMailResetPassword = async (request, reply) => {
             </p>
 
             <!-- CTA Button -->
-            <div style="text-align: center; margin: 35px 0;">
+           <p style="text-align: center; margin: 35px 0;">
               <a href="${resetLink}" 
-                 style="display: inline-block; 
-                        padding: 16px 32px; 
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                        color: #ffffff; 
-                        text-decoration: none; 
-                        border-radius: 12px; 
-                        font-size: 16px; 
-                        font-weight: 600; 
-                        letter-spacing: 0.5px;
-                        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-                        transition: all 0.3s ease;">
+                style="background-color: #667eea; 
+                color: white; 
+                padding: 14px 24px; 
+                border-radius: 8px; 
+                text-decoration: none; 
+                display: inline-block;">
                 🔐 รีเซ็ตรหัสผ่านของฉัน
               </a>
-            </div>
+            </p>
 
             <!-- Security Info -->
             <div style="background-color: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; padding: 20px; margin: 25px 0;">
@@ -450,17 +445,19 @@ export const verifyResetPasswordToken = async (request, reply) => {
 export const resetChangePassword = async (request, reply) => {
   const authHeader = request.headers.authorization;
   if (!authHeader) {
-    return reply.code(401).send({ message: 'Token ไม่ถูกต้องหรือหมดอายุ' });
+    return reply.code(401).send({ message: "Token ไม่ถูกต้องหรือหมดอายุ" });
   }
 
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.slice(7)
+    : authHeader;
 
   try {
     const decoded = jwt.verify(token, process.env.RESET_PASSWORD_SECRET);
 
     const userId = decoded.userId;
     if (!userId) {
-      return reply.code(400).send({ message: 'ไม่พบข้อมูลผู้ใช้ใน token' });
+      return reply.code(400).send({ message: "ไม่พบข้อมูลผู้ใช้ใน token" });
     }
 
     const { password } = request.body;
@@ -471,15 +468,15 @@ export const resetChangePassword = async (request, reply) => {
       data: { password: hashedPassword },
     });
 
-    return reply.send({ message: 'เปลี่ยนรหัสผ่านสำเร็จ' });
+    return reply.send({ message: "เปลี่ยนรหัสผ่านสำเร็จ" });
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
+    if (error.name === "TokenExpiredError") {
       return reply.code(401).send({
-        message: 'Token หมดอายุ กรุณาขอรหัสผ่านใหม่',
+        message: "Token หมดอายุ กรุณาขอรหัสผ่านใหม่",
         expiredAt: error.expiredAt,
       });
     }
-    console.error('resetChangePassword error:', error);
-    return reply.code(401).send({ message: 'Token ไม่ถูกต้องหรือหมดอายุ' });
+    console.error("resetChangePassword error:", error);
+    return reply.code(401).send({ message: "Token ไม่ถูกต้องหรือหมดอายุ" });
   }
 };

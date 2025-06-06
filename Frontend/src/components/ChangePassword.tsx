@@ -20,7 +20,7 @@ function ChangePassword({token }: ChangePasswordFormProps) {
     setLoading(true);
     try {
       await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/auth/reset-password`,
+        `/api/auth/reset-password`,
         { password },
         {
           headers: {
