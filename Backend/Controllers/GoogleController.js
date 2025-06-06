@@ -73,18 +73,14 @@ export const googleOAuthLogin = async (request, reply) => {
       { expiresIn: "1d" }
     );
 
-   
-
     reply.setCookie("schedule_pro", token, {
       httpOnly: true,
-      secure: true, 
-      sameSite: "none", 
+      secure: true,
+      sameSite: "none",
       path: "/",
       maxAge: 24 * 60 * 60,
     });
 
-   
-    
     return reply.send({
       message: "Authenticated via Google",
       token,

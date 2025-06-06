@@ -86,16 +86,22 @@ export const Authentication = async (request, reply) => {
 export const Register = async (request, reply) => {
   const formData = request.body;
 
-  if (formData.password !== formData.confirmPassword) {
+  const username = formData.username?.toLowerCase();
+  const email = formData.email?.toLowerCase();
+  const password = formData.password;
+  const confirmPassword = formData.confirmPassword?.toLowerCase(); // เผื่อกรอกเป็นตัวใหญ่
+  const studentId = formData.studentId;
+
+  if (password !== confirmPassword) {
     return reply.status(400).send({ message: "Passwords do not match." });
   }
 
   try {
     const [existingStudentId, existingUsername, existingEmail] =
       await Promise.all([
-        prisma.user.findUnique({ where: { studentId: formData.studentId } }),
-        prisma.user.findUnique({ where: { username: formData.username } }),
-        prisma.user.findUnique({ where: { email: formData.email } }),
+        prisma.user.findUnique({ where: { studentId } }),
+        prisma.user.findUnique({ where: { username } }),
+        prisma.user.findUnique({ where: { email } }),
       ]);
 
     if (existingStudentId) {
@@ -108,14 +114,15 @@ export const Register = async (request, reply) => {
       return reply.status(400).send({ message: "Email already exists." });
     }
 
-    const hashedPassword = await bcrypt.hash(formData.password, 12);
+    const hashedPassword = await bcrypt.hash(password, 12);
+
     const user = await prisma.user.create({
       data: {
-        studentId: formData.studentId,
+        studentId,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        username: formData.username,
-        email: formData.email,
+        username, 
+        email,    
         password: hashedPassword,
       },
     });
@@ -133,14 +140,13 @@ export const Register = async (request, reply) => {
       { expiresIn: "1d" }
     );
 
-
-      reply.setCookie("schedule_pro", token, {
-        httpOnly: true,
-        secure: false,
-        sameSite:  "none" ,
-        path: "/",
-        maxAge: 24 * 60 * 60,
-      });
+    reply.setCookie("schedule_pro", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+      path: "/",
+      maxAge: 24 * 60 * 60,
+    });
 
     return reply.status(201).send({
       message: "User registered successfully",
@@ -161,12 +167,16 @@ export const Register = async (request, reply) => {
 
 // Login
 export const Login = async (request, reply) => {
-  const { username, password, checked } = request.body;
+  let { username, password, checked } = request.body;
+
   if (!username || !password) {
     return reply.status(400).send({
       message: "Enter your username and password",
     });
   }
+
+  // Convert input to lowercase
+  username = username.toLowerCase();
 
   try {
     const [StudentId, Username, Email] = await Promise.all([
@@ -174,6 +184,7 @@ export const Login = async (request, reply) => {
       prisma.user.findUnique({ where: { username: username } }),
       prisma.user.findUnique({ where: { email: username } }),
     ]);
+
     const user = StudentId || Username || Email;
     if (!user) {
       return reply.status(404).send({ message: "User not found" });
@@ -183,6 +194,7 @@ export const Login = async (request, reply) => {
     if (!isPasswordValid) {
       return reply.status(401).send({ message: "Invalid password" });
     }
+
     const token = jwt.sign(
       {
         id: user.id,
@@ -197,6 +209,7 @@ export const Login = async (request, reply) => {
         expiresIn: checked ? "7d" : "1d",
       }
     );
+
     reply.setCookie("schedule_pro", token, {
       httpOnly: true,
       secure: true,
@@ -213,6 +226,7 @@ export const Login = async (request, reply) => {
     return reply.status(500).send({ message: "Internal server error" });
   }
 };
+
 
 // Logout
 export const Logout = async (request, reply) => {
