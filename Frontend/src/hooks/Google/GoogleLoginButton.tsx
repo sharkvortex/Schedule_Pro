@@ -11,7 +11,7 @@ export default function GoogleLoginButton() {
     onSuccess: async (tokenResponse) => {
       try {
         const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/auth/google`,
+          `/api/auth/google`,
           {
             access_token: tokenResponse.access_token,
           },
