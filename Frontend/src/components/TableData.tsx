@@ -6,11 +6,15 @@ export interface TableDataProps {
   study_day: string;
   period: string;
   subjects: SubjectType[] | null | undefined;
-  subjectLoading:boolean
+  subjectLoading: boolean;
 }
 
-function TableData({ study_day, period , subjects , subjectLoading }: TableDataProps) {
-
+function TableData({
+  study_day,
+  period,
+  subjects,
+  subjectLoading,
+}: TableDataProps) {
   const filteredSubjects = useMemo(() => {
     return subjects?.filter(
       (subject) => subject.study_day === study_day && subject.period === period
@@ -22,15 +26,15 @@ function TableData({ study_day, period , subjects , subjectLoading }: TableDataP
 
   if (isStillLoading) {
     return (
-      <div className="my-8 px-5 space-y-4">
-        {[...Array(2)].map((_, index) => (
+      <div className="h-[162px] px-5 flex items-center">
+        {[...Array(1)].map((_, index) => (
           <div
             key={index}
-            className="w-full p-2 rounded border border-gray-100/5 shadow animate-pulse"
+            className="w-full h-[100px] p-2 rounded border border-gray-100/5 shadow animate-pulse flex flex-col justify-center space-y-2 overflow-hidden"
           >
-            <div className="mb-2 h-4 w-1/2 rounded bg-gray-300/30" />
-            <div className="mb-1 h-3 w-1/3 rounded bg-gray-300/20" />
-            <div className="mb-1 h-3 w-2/3 rounded bg-gray-300/20" />
+            <div className="h-4 w-1/2 rounded bg-gray-300/30" />
+            <div className="h-3 w-1/3 rounded bg-gray-300/20" />
+            <div className="h-3 w-2/3 rounded bg-gray-300/20" />
             <div className="h-3 w-1/4 rounded bg-gray-300/20" />
           </div>
         ))}

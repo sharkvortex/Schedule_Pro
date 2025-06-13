@@ -70,24 +70,24 @@ function Username() {
       setIsProfileOpen(false);
     }, 200);
   };
-
+  if (auth?.isLoading) return null;
   return (
     <div className="flex items-center">
       {auth?.isLogin && auth?.user ? (
         <div
-          className="flex items-center  relative"
+          className="flex items-center relative"
           ref={dropdownRef}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="flex items-center">
+          <div
+            className="flex items-center"
+            onClick={() => setIsProfileOpen((prev) => !prev)}
+          >
             <div className="h-5 w-5 rounded-full bg-gray-200 flex items-center justify-center mr-2 overflow-hidden">
               <FaUser className="text-gray-500 text-xs" />
             </div>
-            <button
-              onClick={() => setIsProfileOpen((prev) => !prev)}
-              className="flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-md transition-all duration-300 hover:cursor-pointer hover:text-blue-500 group"
-            >
+            <button className="flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-md transition-all duration-300 hover:cursor-pointer hover:text-blue-500 group">
               <span className="mr-1">{firstName}</span>
               <span className="h-5 w-5 flex items-center justify-center">
                 {isProfileOpen ? (
@@ -107,9 +107,8 @@ function Username() {
           </div>
 
           {isProfileOpen && (
-            <div className="absolute top-full -left-15 mt-2 w-70 bg-white shadow-2xl rounded-2xl z-50 text-sm overflow-hidden transform origin-top-right transition-all duration-300 ease-out ">
-              {/* Header Section */}
-              <div className="relative  px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-600">
+            <div className="absolute top-full -left-15 mt-2 w-70 bg-white shadow-2xl rounded-2xl z-50 text-sm overflow-hidden transform origin-top-right transition-all duration-300 ease-out">
+              <div className="relative px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-600">
                 <div className="absolute inset-0 bg-black opacity-5"></div>
                 <div className="relative">
                   <div className="flex items-center mb-3 gap-4">
@@ -136,7 +135,6 @@ function Username() {
                 </div>
               </div>
 
-              {/* Menu Items */}
               <div className="py-2">
                 <Link to={"/user/profile"}>
                   <button className="w-full text-left px-6 py-3.5 font-medium text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 flex items-center gap-4 transition-all duration-200 group hover:cursor-pointer">
@@ -168,7 +166,6 @@ function Username() {
                   </Link>
                 )}
 
-                {/* Divider */}
                 <div className="my-2 px-6">
                   <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
                 </div>
@@ -195,24 +192,22 @@ function Username() {
         <>
           <Link to="/login" className="mr-2">
             <button
-              className={`text-xs flex items-center py-1 px-4 text-[#4f39f6] border border-[#4f39f6] rounded-md transition-all duration-500 hover:bg-[#4f39f6] hover:text-white hover:border-[#4f39f6] hover:cursor-pointer focus:outline-none
-                ${
-                  location.pathname === "/login"
-                    ? "bg-[#4f39f6] text-white"
-                    : "bg-[#4f39f6]/20"
-                }`}
+              className={`text-xs flex items-center py-1 px-4 text-[#4f39f6] border border-[#4f39f6] rounded-md transition-all duration-500 hover:bg-[#4f39f6] hover:text-white hover:border-[#4f39f6] hover:cursor-pointer focus:outline-none ${
+                location.pathname === "/login"
+                  ? "bg-[#4f39f6] text-white"
+                  : "bg-[#4f39f6]/20"
+              }`}
             >
               <FaUser className="text-sm mr-2" /> เข้าสู่ระบบ
             </button>
           </Link>
           <Link to="/register">
             <button
-              className={`text-xs flex items-center py-1 px-4 text-[#FF7043] border border-[#FF7043] rounded-md transition-all duration-500 hover:bg-[#FF7043] hover:text-white hover:border-[#FF7043] hover:cursor-pointer focus:outline-none
-                ${
-                  location.pathname === "/register"
-                    ? "bg-[#FF7043] text-white"
-                    : "bg-[#FF7043]/20"
-                }`}
+              className={`text-xs flex items-center py-1 px-4 text-[#FF7043] border border-[#FF7043] rounded-md transition-all duration-500 hover:bg-[#FF7043] hover:text-white hover:border-[#FF7043] hover:cursor-pointer focus:outline-none ${
+                location.pathname === "/register"
+                  ? "bg-[#FF7043] text-white"
+                  : "bg-[#FF7043]/20"
+              }`}
             >
               <FaUser className="text-sm mr-2" /> สมัครสมาชิก
             </button>
