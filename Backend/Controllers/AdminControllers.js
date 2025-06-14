@@ -343,9 +343,17 @@ export const editSubject = async (request, reply) => {
 // DELETE SUBJECT
 export const deleteSubject = async (request, reply) => {
   const { id } = request.params;
+
   try {
     const existingSubject = await prisma.subject.findUnique({
       where: { id: Number(id) },
+      include: {
+        works: {
+          include: {
+            images: true,
+          },
+        },
+      },
     });
 
     if (!existingSubject) {
@@ -354,12 +362,28 @@ export const deleteSubject = async (request, reply) => {
       });
     }
 
+   
+    const allFileIds = existingSubject.works.flatMap((work) =>
+      work.images.map((img) => img.fileId)
+    );
+
+    
+    if (allFileIds.length > 0) {
+      await Promise.all(
+        allFileIds.map((fileId) => imagekit.deleteFile(fileId))
+      );
+    }
+
+   
     await prisma.subject.delete({
       where: { id: Number(id) },
     });
 
     return reply.code(200).send({
-      message: "ลบรายวิชาสำเร็จ",
+      message:
+        allFileIds.length > 0
+          ? "ลบรายวิชาและรูปภาพสำเร็จ"
+          : "ลบรายวิชาสำเร็จ",
     });
   } catch (error) {
     console.error("Delete subject error:", error);
