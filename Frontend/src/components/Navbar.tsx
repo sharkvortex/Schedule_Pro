@@ -38,7 +38,8 @@ function Navbar() {
     <nav ref={navbarRef} className="relative flex-shrink-0 h-screen">
       <button
         onClick={toggleNavbar}
-        className="absolute z-10 -right-6 top-6 p-3 bg-blue-500 text-white  rounded-full  transition-all duration-300 hover:translate-x-1    hover:cursor-pointer hover:border-blue-500 "
+        aria-label={isOpen ? "ปิดเมนู" : "เปิดเมนู"}
+        className="absolute z-10 -right-6 top-6 p-3 bg-blue-500 text-white rounded-full transition-all duration-300 hover:translate-x-1 hover:cursor-pointer hover:border-blue-500"
       >
         <div className="text-lg">
           {isOpen ? <RiMenuUnfold2Fill /> : <RiMenuFold2Line />}
