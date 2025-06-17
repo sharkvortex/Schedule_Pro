@@ -1,5 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap");
 @import "tailwindcss";
+
+
 
 :root {
   --background-light: #ffffff;
@@ -14,18 +15,18 @@ input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-  -webkit-text-fill-color: rgb(71, 71, 71) !important;  /* เพิ่มสีข้อความ */
+  -webkit-text-fill-color: rgb(71, 71, 71) !important;  
   transition: background-color 9999s ease-in-out 0s;
 }
 input, textarea {
-  caret-color: gray; /* เปลี่ยนสีเคอร์เซอร์เป็นสีแดง */
+  caret-color: gray; 
 }
 
-html,
-body {
-  font-family: "Fredoka", "IBM Plex Sans Thai", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+html, body {
+  font-family: "Fredoka", "IBM Plex Sans Thai", ui-sans-serif, system-ui, sans-serif;
   font-style: normal;
 }
+
 
 html {
   background-color: var(--background-light);
