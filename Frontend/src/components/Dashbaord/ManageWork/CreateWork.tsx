@@ -113,7 +113,7 @@ function CreateWork({ setIsCreate, isCreate, refetch }: CreateWorkProps) {
               <div>
                 <label className="block text-sm font-medium mb-1">วิชา</label>
                 <select
-                  className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500  text-white"
                   name="subject_id"
                   onChange={handleChange}
                   value={formData.subject_id}
@@ -138,13 +138,13 @@ function CreateWork({ setIsCreate, isCreate, refetch }: CreateWorkProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium   mb-1">
+                <label className="block text-sm font-medium mb-1">
                   หัวข้อ
                 </label>
                 <input
                   type="text"
                   placeholder="เช่น งานโปรเจกต์ React"
-                  className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
                   name="title"
                   onChange={handleChange}
                   value={formData.title}
@@ -158,7 +158,7 @@ function CreateWork({ setIsCreate, isCreate, refetch }: CreateWorkProps) {
                 <textarea
                   rows={3}
                   placeholder="รายละเอียดของงาน"
-                  className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
                   name="description"
                   onChange={handleChange}
                   value={formData.description}
@@ -173,7 +173,7 @@ function CreateWork({ setIsCreate, isCreate, refetch }: CreateWorkProps) {
                   <div className="relative">
                     <input
                       type="date"
-                      className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
                       name="assignedDate"
                       onChange={handleChange}
                       value={formData.assignedDate}
@@ -188,7 +188,7 @@ function CreateWork({ setIsCreate, isCreate, refetch }: CreateWorkProps) {
                   <div className="relative">
                     <input
                       type="date"
-                      className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
                       name="dueDate"
                       onChange={handleChange}
                       value={formData.dueDate}
@@ -205,7 +205,7 @@ function CreateWork({ setIsCreate, isCreate, refetch }: CreateWorkProps) {
                   <input
                     type="text"
                     placeholder="วางลิ้งก์งาน"
-                    className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white"
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
                     name="link"
                     onChange={handleChange}
                     value={formData.link}
@@ -241,7 +241,7 @@ function CreateWork({ setIsCreate, isCreate, refetch }: CreateWorkProps) {
                   <input
                     type="text"
                     placeholder="วางลิ้งก์โค้ด เช่น GitHub"
-                    className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white"
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
                     name="linkCode"
                     onChange={handleChange}
                   />
