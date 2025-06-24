@@ -1,4 +1,6 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm install --legacy-peer-deps",
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -8,8 +10,5 @@
       "source": "/(.*)",
       "destination": "/"
     }
-  ],
-  "build": {
-    "installCommand": "npm install --legacy-peer-deps"
-  }
+  ]
 }
